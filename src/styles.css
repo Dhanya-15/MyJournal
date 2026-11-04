@@ -89,3 +89,62 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}:focus
 .setpage{position:relative}.setside{display:none}
 @media(min-width:1280px){.setpage{padding-right:170px}.setside{display:block;position:absolute;right:-30px;top:30px;height:760px;width:210px;object-fit:cover;mask-image:linear-gradient(to right,transparent,#000 40%);pointer-events:none}}
 @media(max-width:760px){.lockscreen{left:0;grid-template-columns:1fr}.lockart{display:none}.entry{grid-template-columns:76px 1fr}}
+
+/* ===== RESPONSIVE FIXES (keep at the very end of the file) ===== */
+html,body{overflow-x:hidden}
+img{max-width:100%}
+@media(max-width:1100px){
+  .jr{grid-template-columns:1fr}
+  .rside{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+  .deco{opacity:.5}
+}
+@media(max-width:900px){
+  .write,.cal,.mtop,.lockscreen{grid-template-columns:1fr}
+  .cards5{flex-direction:column;margin:30px 0;min-height:0}
+  .wc,.wc.cur{min-height:0;flex:none;width:100%;transform:none!important}
+  .arr{display:none}
+  .welbook{opacity:.25;width:80%}
+  .desk img{max-height:90px}
+}
+
+@media(max-width:760px){
+  .side{position:fixed!important;top:0;left:0;z-index:40;height:100vh;transform:translateX(-100%);transition:transform .3s}
+  .side.open{transform:none;box-shadow:8px 0 30px rgba(0,0,0,.35)}
+  .burger{display:block;z-index:45}
+  .main{padding:64px 14px 30px;width:100%}
+  .top{gap:10px}
+  .search{max-width:none;min-width:0;padding:9px 14px}
+  h1{font-size:2rem}
+  .hero{flex-direction:column;text-align:center}
+  .two,.three,.grid{grid-template-columns:1fr}
+  .bar{padding:8px}
+  .bar .inp{flex:1 1 140px}
+  .tab{padding:8px 14px}
+  .col{width:calc(50% - 6px)}
+  .entry{grid-template-columns:84px 1fr}
+  .keep{flex-direction:column;text-align:center}
+  .gridcal{gap:3px}
+  .day{min-height:52px;padding:4px;font-size:.8rem}
+  .dthumb{display:none}
+  .moods{grid-template-columns:repeat(3,1fr)}
+  .paper{padding:16px;border-left-width:6px}
+  .body{min-height:260px}
+  .lockscreen{left:0;padding:16px;gap:10px}
+  .lockart{display:none}
+  .glass{padding:22px}
+  .wbar{padding:16px;gap:14px}
+  .ill>*:not(img){max-width:100%}
+  .ill-img{opacity:.25}
+  .desk{display:none}
+  .mtop>.card:first-child{min-height:0}
+  .moodart{opacity:.2}
+  .modal{padding:8px}
+}
+
+@media(max-width:760px){
+  .big{font-size:2.3rem}
+  .skip{top:0;right:0}
+  .wel .eyebrow{margin-top:34px}
+  .cards5{margin:24px 0}
+  .wbar .col2{width:100%}
+}
