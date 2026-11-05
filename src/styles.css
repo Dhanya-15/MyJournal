@@ -257,3 +257,13 @@ body.welcome-page .top{display:none}
   .wl{flex:none}
   .cf{flex:none;height:340px}
 }
+
+/* ===== FIX: carousel must never overlap the sidebar ===== */
+.main{isolation:isolate}
+.side{z-index:60!important}
+.burger{z-index:70!important}
+.cf{overflow:hidden;contain:paint}
+.cf-card{will-change:transform}
+@media(max-width:860px){
+  .side.open ~ .main .cf{visibility:hidden}
+}
