@@ -15,7 +15,7 @@ import Settings from './pages/Settings.jsx'
 const NAV = [['/home','Home',HomeI],['/write','Write Journal',PenLine],['/journal','My Journal',BookOpen],['/calendar','Calendar',CalendarDays],['/mood','Mood Insights',BarChart3],['/settings','Settings',SetI]]
 
 function Shell({ children }) {
-  const { settings, setSettings } = useApp()
+  const { settings, setSettings, setDemo } = useApp()
   const [open, setOpen] = useState(false)
   const dark = settings.theme === 'dark'
   const nav = useNavigate()
@@ -26,13 +26,16 @@ function Shell({ children }) {
         <div className="logo"><Leaf /> <span>MyJournal</span></div>
         <nav>{NAV.map(([to, label, Icon]) => <NavLink key={to} to={to}><Icon size={20} />{label}</NavLink>)}</nav>
         <div className="grow" />
+        <button className="toggle demo-sw" aria-pressed={isDemo()} aria-label="Demo mode" onClick={(e) => { e.stopPropagation(); setDemo(!isDemo()) }}>
+          <span>Demo Mode</span><span className={'knob ' + (isDemo() ? 'on' : '')} />
+        </button>
         <button className="toggle" onClick={(e) => { e.stopPropagation(); setSettings({ ...settings, theme: dark ? 'light' : 'dark' }) }} aria-label="Toggle theme">
           <Sun size={16} /><span className={'knob ' + (dark ? 'on' : '')} /><Moon size={16} />
         </button>
         <p className="tag"><Leaf size={18} /><br />Every page<br />holds a moment<br />of you.</p>
       </aside>
       <main className="main">
-        {isDemo() && <div className="demo">Demo Mode · sample data, separate from your journal</div>}
+        {isDemo() && <div className="demo">Demo Mode · sample data, separate from your journal <button onClick={() => setDemo(false)}>Exit Demo</button></div>}
         <div className="top"><label className="search"><Search size={18} /><input placeholder="Search your entries…" aria-label="Search entries" onKeyDown={(e) => e.key === 'Enter' && nav('/journal?q=' + encodeURIComponent(e.target.value))} /></label>
           <button aria-label="Notifications" className="bell"><Bell size={20} /></button><button className="avatar" aria-label="Profile" onClick={() => nav('/settings')}>🌿</button></div>
         {children}

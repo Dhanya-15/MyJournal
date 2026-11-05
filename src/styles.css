@@ -317,3 +317,8 @@ body.portal-in .main{animation:pt-reveal 1.1s cubic-bezier(.2,.8,.2,1) both}
 }
 @media(max-height:640px){.pt-trust{display:none}}
 @media(prefers-reduced-motion:reduce){.br,.fl,.sp{animation:none}}
+
+/* ===== DEMO BANNER ===== */
+.demo-sw{margin-bottom:10px;font-size:.9rem}
+.demo{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.demo button{background:#2b2210;color:#fff;border-radius:20px;padding:3px 12px;font-size:.8rem}
