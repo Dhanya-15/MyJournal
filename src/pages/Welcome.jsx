@@ -1,41 +1,79 @@
 import { useNavigate } from 'react-router-dom'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useApp } from '../store.jsx'
-import { Lock, Leaf, Heart, ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react'
+import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react'
+import Art from '../WelcomeArt.jsx'
 
 const S = [
   ['01', 'Write Freely', 'Capture your thoughts, memories and little moments.', 's1'],
   ['02', 'Track Your Mood', 'Understand your emotions and see your progress over time.', 's2'],
-  ['03', 'Stay Organized', 'View your entries beautifully in a calendar and never miss a moment.', 's3'],
-  ['04', 'Gain Insights', 'See patterns, celebrate growth and learn more about yourself.', 's4'],
-  ['05', 'Make It Yours', 'Customize your theme, preferences and keep your space comfortable.', 's5'],
+  ['03', 'Stay Organized', 'See your entries in a calendar and never miss a moment.', 's3'],
+  ['04', 'Gain Insights', 'Spot patterns, celebrate growth and learn about yourself.', 's4'],
+  ['05', 'Make It Yours', 'Pick your theme, set preferences and lock private entries.', 's5'],
 ]
+const N = S.length
+
 export default function Welcome() {
   const nav = useNavigate()
   const { settings, setSettings, setDemo } = useApp()
   const [i, setI] = useState(0)
+  const [paused, setPaused] = useState(false)
+  const startX = useRef(null)
+
+  useEffect(() => {
+    document.body.classList.add('welcome-page')
+    return () => document.body.classList.remove('welcome-page')
+  }, [])
+
+  useEffect(() => {
+    if (paused || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const t = setInterval(() => setI((v) => (v + 1) % N), 3200)
+    return () => clearInterval(t)
+  }, [paused])
+
   const go = () => { setSettings({ ...settings, onboarded: true }); nav('/home') }
+  const next = () => setI((v) => (v + 1) % N)
+  const prev = () => setI((v) => (v + N - 1) % N)
+  const off = (k) => { let o = (k - i + N) % N; if (o > 2) o -= N; return o }
+
   return (
-    <div className="wel">
-      <button className="skip" onClick={go}>Skip <ArrowRight size={16} /></button>
-      <img className="welbook" src="/images/wel-book.jpg" alt="" />
-      <p className="eyebrow">Welcome to MyJournal</p>
-      <h1 className="big">Your Story, Your Space</h1>
-      <p className="lead">A peaceful place to write, reflect and grow — one day at a time.</p>
-      <div className="cards5">
-        <button className="arr l" aria-label="Back" onClick={() => setI(Math.max(0, i - 1))}><ChevronLeft /></button>
-        {S.map(([n, t, d, ic], k) => (
-          <article key={t} className={'wc ' + (k === i ? 'cur' : '')} style={{ transform: `perspective(900px) rotateY(${(i - k) * 6}deg) translateY(${k === i ? 0 : 24 + Math.abs(i - k) * 6}px)` }} onClick={() => setI(k)}>
-            <small>{n}</small><h3>{t}</h3><p>{d}</p><img className="art" src={`/images/${ic}.jpg`} alt="" /></article>))}
-        <button className="arr r" aria-label="Next" onClick={() => setI(Math.min(4, i + 1))}><ChevronRight /></button>
-      </div>
-      <div className="row center">{S.map((_, k) => <button key={k} className={'dot ' + (k === i ? 'on' : '')} aria-label={'Slide ' + (k + 1)} onClick={() => setI(k)} />)}</div>
-      <div className="wbar">
-        <em className="quote">“A small step today for a calmer tomorrow.”</em>
-        <div className="feat"><Lock /><div><b>Your data stays private</b><small>Stored safely in your browser. No account needed.</small></div></div>
-        <div className="feat"><Leaf /><div><b>Simple and peaceful</b><small>A clean space with minimal distractions.</small></div></div>
-        <div className="feat"><Heart /><div><b>Built for your wellbeing</b><small>Write, reflect and feel better every day.</small></div></div>
-        <div className="col2"><button className="btn" onClick={go}>Get Started <ArrowRight size={16} /></button><button className="link" onClick={() => setDemo(true)}>Try Demo</button></div>
+    <div className="wl">
+      <img className="wl-bg" src="/images/wel-book.jpg" alt="" />
+      <button className="wl-skip" onClick={go}>Skip <ArrowRight size={16} /></button>
+
+      <section className="wl-text">
+        <p className="eyebrow wl-in" style={{ '--d': '0s' }}>Welcome to MyJournal</p>
+        <h1 className="wl-h wl-in" style={{ '--d': '.12s' }}>Your Story, Your Space</h1>
+        <p className="lead wl-in" style={{ '--d': '.26s' }}>A peaceful place to write, reflect and grow — one day at a time.</p>
+        <div className="wl-cta wl-in" style={{ '--d': '.4s' }}>
+          <button className="btn" onClick={go}>Get Started <ArrowRight size={16} /></button>
+          <button className="btn ghost" onClick={() => setDemo(true)}>Try Demo</button>
+        </div>
+      </section>
+
+      <section
+        className="cf wl-in" style={{ '--d': '.5s' }}
+        onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}
+        onTouchStart={(e) => { startX.current = e.touches[0].clientX }}
+        onTouchEnd={(e) => { if (startX.current == null) return; const dx = e.changedTouches[0].clientX - startX.current; if (Math.abs(dx) > 40) (dx < 0 ? next : prev)(); startX.current = null }}
+      >
+        <button className="cf-arr l" aria-label="Previous card" onClick={prev}><ChevronLeft /></button>
+        {S.map(([n, t, d, img], k) => {
+          const o = off(k)
+          return (
+            <article key={t} className={'cf-card' + (o === 0 ? ' cur' : '')} style={{ '--o': o, '--a': Math.abs(o) }} onClick={() => setI(k)} aria-hidden={o !== 0}>
+              <small>{n}</small>
+              <h3>{t}</h3>
+              <p>{d}</p>
+              <div className="cf-art"><Art k={img} /></div>
+            </article>
+          )
+        })}
+        <button className="cf-arr r" aria-label="Next card" onClick={next}><ChevronRight /></button>
+      </section>
+
+      <div className="cf-dots">
+        {S.map((_, k) => <button key={k} className={k === i ? 'on' : ''} aria-label={'Show card ' + (k + 1)} onClick={() => setI(k)} />)}
       </div>
     </div>
   )

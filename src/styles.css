@@ -165,3 +165,87 @@ img{max-width:100%}
   .wc,.wc.cur{width:100%!important;flex:none!important;min-height:0!important;transform:none!important}
   .welbook{opacity:.2;width:90%}
 }
+
+/* ===== WELCOME: one screen, no scroll, auto-cycling cards (keep at the END of the file) ===== */
+body.welcome-page{overflow:hidden}
+body.welcome-page .main{display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden;padding-bottom:14px}
+body.welcome-page .top{flex:none;margin-bottom:0}
+.wel{flex:1;min-height:0;display:flex;flex-direction:column;padding-top:0}
+.wel .eyebrow{margin-top:4px}
+.wel .big{font-size:clamp(2rem,6vh,3.6rem);margin:.05em 0}
+.wel .lead{font-size:clamp(.9rem,2.2vh,1.2rem);margin:0}
+.wel .skip{top:-44px}
+.cards5{flex:1;min-height:0;display:flex;flex-direction:row;align-items:center;gap:14px;margin:12px 40px 6px;position:relative}
+.wc{flex:1;height:66%;min-height:0;min-width:0;transform:none!important;padding:14px 16px;overflow:hidden;display:flex;flex-direction:column;transition:flex .8s cubic-bezier(.2,.8,.2,1),height .8s cubic-bezier(.2,.8,.2,1),box-shadow .8s}
+.wc.cur{flex:1.5;height:100%;min-height:0;outline:3px solid #fff;box-shadow:0 18px 40px rgba(50,70,50,.18)}
+.wc h3{margin:2px 0;font-size:clamp(1rem,2.6vh,1.35rem)}
+.wc p{font-size:clamp(.78rem,1.7vh,.92rem);margin:2px 0 8px}
+.wc .art,.wc.cur .art{flex:1;min-height:0;width:100%;height:auto;object-fit:cover;border-radius:14px;margin-top:auto}
+.wel>.row.center{flex:none;margin:2px 0 8px}
+.wbar{flex:none;margin-top:0;padding:12px 22px}
+
+/* phones: show one card at a time so everything still fits on one screen */
+@media(max-width:900px){
+  .cards5{margin:8px 0!important;flex-direction:row!important}
+  .wc:not(.cur){display:none!important}
+  .wc.cur{flex:1 1 auto!important;height:100%!important;width:100%!important}
+  .arr{display:none!important}
+  .wbar .feat,.wbar .quote{display:none}
+  .wbar{justify-content:center}
+  .wel .big{font-size:clamp(1.8rem,5.5vh,2.6rem)!important}
+  .welbook{opacity:.15}
+}
+
+/* ==/* ===== WELCOME: COVERFLOW CAROUSEL (keep at the END of the file) ===== */
+body.welcome-page{overflow:hidden}
+body.welcome-page .main{display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden;padding-top:20px;padding-bottom:16px}
+body.welcome-page .top{display:none}
+.wl{position:relative;flex:1;min-height:0;display:flex;flex-direction:column}
+.wl-bg{position:absolute!important;right:-5%;top:-4%;width:min(55%,640px);opacity:.5;z-index:0!important;pointer-events:none;mask-image:linear-gradient(to right,transparent,#000 40%),linear-gradient(to bottom,#000 65%,transparent);mask-composite:intersect;-webkit-mask-composite:source-in;animation:wl-float 9s ease-in-out infinite}
+.wl-text{position:relative;z-index:2;flex:none}
+.wl-skip{position:absolute;top:0;right:0;z-index:5;display:flex;gap:6px;align-items:center;padding:8px 16px;border-radius:30px;background:rgba(255,255,255,.65);transition:transform .25s}
+.wl-skip:hover{transform:translateX(3px)}[data-theme=dark] .wl-skip{background:var(--surface)}
+.wl-h{font-size:clamp(2.2rem,8vh,4.2rem);line-height:1.05;margin:.1em 0}
+.wl .lead{max-width:44ch;font-size:clamp(.95rem,2.3vh,1.2rem);margin:0 0 16px}
+.wl-cta{display:flex;gap:12px;flex-wrap:wrap}
+
+.wl-in{opacity:0;animation:wl-up .9s cubic-bezier(.2,.8,.2,1) forwards;animation-delay:var(--d,0s)}
+@keyframes wl-up{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+@keyframes wl-float{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-14px) rotate(1.2deg)}}
+@keyframes wl-fill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+
+/* coverflow stage */
+.cf{position:relative;z-index:2;flex:1;min-height:230px;perspective:1500px;margin-top:10px}
+.cf-card{position:absolute;left:50%;top:50%;width:clamp(190px,18vw,255px);height:76%;display:flex;flex-direction:column;padding:18px;cursor:pointer;
+  background:rgba(251,249,243,.97);border-radius:24px;box-shadow:0 18px 40px rgba(50,70,50,.14);
+  transform:translate(-50%,-50%) translateX(calc(var(--o)*108%)) rotateY(calc(var(--o)*-24deg)) scale(calc(1 - var(--a)*.09));
+  opacity:calc(1 - var(--a)*.24);z-index:calc(10 - var(--a));
+  transition:transform .9s cubic-bezier(.2,.8,.2,1),opacity .9s,height .9s,box-shadow .9s}
+[data-theme=dark] .cf-card{background:var(--surface)}
+.cf-card.cur{height:100%;outline:3px solid #fff;box-shadow:0 28px 60px rgba(50,70,50,.26)}
+.cf-card small{color:var(--muted);letter-spacing:.12em}
+.cf-card h3{font-size:clamp(1.1rem,2.8vh,1.5rem);margin:2px 0}
+.cf-card p{color:var(--muted);margin:0;font-size:clamp(.78rem,1.7vh,.92rem)}
+.cf-card img{flex:1;min-height:0;width:100%;object-fit:cover;border-radius:14px;margin-top:12px}
+.cf-arr{position:absolute;top:50%;z-index:20;width:42px;height:42px;margin-top:-21px;border-radius:50%;background:#fff;color:#233a2e;box-shadow:var(--sh);display:grid;place-items:center;transition:transform .2s}
+.cf-arr:hover{transform:scale(1.1)}.cf-arr.l{left:0}.cf-arr.r{right:0}
+
+.cf-dots{position:relative;z-index:2;flex:none;display:flex;gap:8px;justify-content:center;padding:10px 0 2px}
+.cf-dots button{width:10px;height:10px;border-radius:10px;background:var(--pale);position:relative;overflow:hidden;transition:width .5s}
+.cf-dots button.on{width:46px}
+.cf-dots button.on::after{content:'';position:absolute;inset:0;background:var(--forest);transform-origin:left;animation:wl-fill 3.2s linear forwards}
+
+@media(max-width:860px){
+  .wl-h{font-size:clamp(1.9rem,6.2vh,2.8rem)}
+  .wl-text{padding-top:34px}
+  .wl-bg{opacity:.22;width:90%}
+  .cf-card{width:58vw;height:72%}
+  .cf-card{transform:translate(-50%,-50%) translateX(calc(var(--o)*78%)) rotateY(calc(var(--o)*-24deg)) scale(calc(1 - var(--a)*.09))}
+  .cf-card[style*="--a: 2"]{opacity:0;pointer-events:none}
+  .cf-arr{display:none}
+}
+@media(prefers-reduced-motion:reduce){.wl-in{opacity:1;animation:none}.wl-bg{animation:none}.cf-dots .on::after{animation:none}}
+
+.cf-art{flex:1;min-height:0;margin-top:12px;border-radius:14px;background:linear-gradient(160deg,#f3f1e4,#e2ebd8);display:grid;place-items:center;overflow:hidden}
+.cf-art svg{width:100%;height:100%;display:block}
+[data-theme=dark] .cf-art{background:linear-gradient(160deg,#2b382f,#232e27)}
