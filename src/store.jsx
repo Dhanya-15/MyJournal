@@ -22,13 +22,15 @@ function sample() {
   return { entries, moods, notes: [{ id: 'n1', date: d(0), text: 'Read 10 pages of a book', created: Date.now(), updated: Date.now() }], collections: ['Personal Life', 'Goals', 'Gratitude'] }
 }
 
-function useLS(k, init) {
+// shared=true keeps the key the same in normal and demo mode (used for theme and settings)
+function useLS(k, init, shared = false) {
+  const pre = shared ? 'mj_' : P()
   const [v, set] = useState(() => {
-    try { const s = localStorage.getItem(P() + k); return s ? JSON.parse(s) : init } catch { return init }
+    try { const s = localStorage.getItem(pre + k); return s ? JSON.parse(s) : init } catch { return init }
   })
   useEffect(() => {
-    try { localStorage.setItem(P() + k, JSON.stringify(v)) } catch { alert('Storage is full. Export a backup and delete some entries.') }
-  }, [k, v])
+    try { localStorage.setItem(pre + k, JSON.stringify(v)) } catch { alert('Storage is full. Export a backup and delete some entries.') }
+  }, [k, v, pre])
   return [v, set]
 }
 
@@ -36,19 +38,33 @@ const Ctx = createContext()
 export const useApp = () => useContext(Ctx)
 
 export function AppProvider({ children }) {
-  const s = isDemo() ? sample() : { entries: [], moods: {}, notes: [], collections: [] }
+  const [demo, setDemoState] = useState(isDemo())
+  const [n, setN] = useState(0)
+  const setDemo = (on) => {
+    if (on) localStorage.setItem('mj_mode', 'demo'); else localStorage.removeItem('mj_mode')
+    setDemoState(on)
+  }
+  const resetDemo = () => {
+    Object.keys(localStorage).filter((k) => k.startsWith('mjd_')).forEach((k) => localStorage.removeItem(k))
+    setN((v) => v + 1)
+  }
+  // changing key re-reads the right data set (demo or real) without any navigation
+  return <Data key={(demo ? 'd' : 'r') + n} demo={demo} setDemo={setDemo} resetDemo={resetDemo}>{children}</Data>
+}
+
+function Data({ children, demo, setDemo, resetDemo }) {
+  const s = demo ? sample() : { entries: [], moods: {}, notes: [], collections: [] }
   const [entries, setEntries] = useLS('entries', s.entries)
   const [moods, setMoods] = useLS('moods', s.moods)
   const [notes, setNotes] = useLS('notes', s.notes)
   const [collections, setCollections] = useLS('collections', s.collections)
-  const [settings, setSettings] = useLS('settings', { theme: 'light', name: '', onboarded: false, lockCheck: null })
+  const [settings, setSettings] = useLS('settings', { theme: 'light', name: '', onboarded: false }, true)
   useEffect(() => { document.documentElement.dataset.theme = settings.theme }, [settings.theme])
   const upsert = (en) => setEntries((l) => (l.some((x) => x.id === en.id) ? l.map((x) => (x.id === en.id ? en : x)) : [en, ...l]))
   const api = {
     entries, setEntries, upsert, moods, setMoods, notes, setNotes, collections, setCollections, settings, setSettings,
     removeEntry: (id) => setEntries((l) => l.filter((x) => x.id !== id)),
-    setDemo: (on) => { if (on) localStorage.setItem('mj_mode', 'demo'); else localStorage.removeItem('mj_mode'); window.location.href = '/home' },
-    resetDemo: () => { Object.keys(localStorage).filter((k) => k.startsWith('mjd_')).forEach((k) => localStorage.removeItem(k)); window.location.reload() },
+    demo, setDemo, resetDemo,
   }
   return <Ctx.Provider value={api}>{children}</Ctx.Provider>
 }

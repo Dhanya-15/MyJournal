@@ -322,3 +322,63 @@ body.portal-in .main{animation:pt-reveal 1.1s cubic-bezier(.2,.8,.2,1) both}
 .demo-sw{margin-bottom:10px;font-size:.9rem}
 .demo{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .demo button{background:#2b2210;color:#fff;border-radius:20px;padding:3px 12px;font-size:.8rem}
+
+/* ===== PART 1: fixed navigation, header icons, search, cleanup (keep at the END) ===== */
+@keyframes pg-in{from{opacity:0;transform:perspective(900px) rotateX(4deg) translateY(14px)}to{opacity:1;transform:none}}
+.page{animation:pg-in .55s cubic-bezier(.2,.8,.2,1)}
+.btn:active,.gs:active{transform:translateY(2px) scale(.97)!important;box-shadow:0 3px 8px rgba(36,80,58,.25)!important}
+
+/* only the page content scrolls; the sidebar stays put */
+.main{overflow:visible;overflow-x:clip}
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:55}
+@media(min-width:761px){
+  .side{position:fixed!important;left:0;top:0;height:100vh}
+  .main{margin-left:216px}
+  .burger{display:none!important}
+}
+
+/* header: [search] [profile] [theme] */
+.top{position:sticky!important;top:0;z-index:35!important;display:flex;align-items:center;justify-content:flex-end;gap:10px;padding:10px 0;margin:0 0 6px;background:linear-gradient(var(--bg) 65%,transparent)}
+.ic{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;flex:none;background:var(--surface);color:var(--text);box-shadow:var(--sh);transition:transform .25s,box-shadow .25s}
+.ic:hover{transform:translateY(-2px) rotateX(8deg)}.ic:active{transform:scale(.92)}
+.avatar{font-size:1.2rem;background:var(--pale);border:2px solid #fff}
+.sbox{position:relative;z-index:2}.sback{position:fixed;inset:0;z-index:-1}
+.sfield{display:flex;align-items:center;border-radius:30px;background:var(--surface);box-shadow:var(--sh);transition:box-shadow .3s}
+.sfield .ic{box-shadow:none;background:none}
+.sfield input{width:0;padding:0;border:0;background:none;color:var(--text);font:inherit;outline:0;transition:width .4s cubic-bezier(.2,.8,.2,1),padding .4s}
+.sbox.open .sfield input{width:min(300px,46vw);padding:0 4px 0 18px}
+.sres{position:absolute;top:calc(100% + 10px);right:0;width:min(400px,92vw);display:grid;gap:2px;padding:8px;border-radius:18px;background:var(--surface);box-shadow:0 20px 50px rgba(30,50,40,.22);animation:pg-in .3s both}
+.sres button{display:grid;grid-template-columns:1fr auto;gap:2px 10px;text-align:left;padding:10px 12px;border-radius:12px}
+.sres button:hover,.sres button:focus-visible{background:var(--pale)}
+.sres small{color:var(--muted);align-self:center}.sres span{grid-column:1/-1;color:var(--muted);font-size:.85rem}.sres p{margin:8px 12px}
+
+/* demo switch in the sidebar */
+.demo-sw{margin-bottom:10px;font-size:.9rem}
+.demo{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.demo button{background:#2b2210;color:#fff;border-radius:20px;padding:3px 12px;font-size:.8rem}
+
+/* redundant uppercase page labels are removed everywhere except Welcome */
+.main:not(:has(.pt)) .eyebrow{display:none}
+
+/* removed decorations and controls */
+.desk{display:none!important}
+.rside>section:first-child{display:none}
+.bar input[aria-label="Search"]{display:none}
+
+/* Welcome keeps only the menu button on phones, nothing on desktop */
+.main:has(.pt) .top{display:flex!important;background:none}
+.main:has(.pt) .top>:not(.burger){display:none}
+@media(min-width:761px){.main:has(.pt) .top{display:none!important}}
+
+/* phone: fixed top bar with the menu button */
+@media(max-width:760px){
+  .top{position:fixed!important;left:0;right:0;top:0;padding:8px 12px;background:var(--bg);box-shadow:0 2px 14px rgba(0,0,0,.07)}
+  .burger{position:static!important;display:grid!important;place-items:center;margin-right:auto;width:42px;height:42px;padding:0}
+  .main{padding-top:68px!important}
+  .main:has(.pt){padding-top:60px!important}
+  .main:has(.pt) .top{box-shadow:none}
+  .sbox.open{position:fixed;left:10px;right:10px;top:8px;z-index:60}
+  .sbox.open .sfield{width:100%}.sbox.open .sfield input{flex:1;width:auto}
+  .sres{left:0;right:0;width:auto}
+}
+@media(prefers-reduced-motion:reduce){.page,.sres{animation:none}.ic{transition:none}}
