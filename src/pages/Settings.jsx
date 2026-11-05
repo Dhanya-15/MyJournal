@@ -88,9 +88,16 @@ export default function Settings() {
     </>,
   }
   const cur = TILES.find((t) => t[0] === open)
+  const CurIcon = cur ? cur[2] : null
 
+  
   return (
     <>
+      <div className="sbg" aria-hidden="true">
+        <i className="o o1" /><i className="o o2" /><i className="o o3" />
+        <i className="lf l1" /><i className="lf l2" /><i className="lf l3" /><i className="lf l4" />
+        <i className="rg r1" /><i className="rg r2" />
+      </div>
       <h1>Customize Your Space</h1>
       <p className="sub">Make MyJournal truly yours. Pick an icon to change its settings.</p>
       <div className="stiles">
@@ -103,7 +110,7 @@ export default function Settings() {
       {cur && (
         <div className="spback" onClick={() => setOpen(null)}>
           <div className="spcard" role="dialog" aria-modal="true" aria-label={cur[1]} onClick={(e) => e.stopPropagation()}>
-            <h3>const CurIcon = cur ? cur[2] : null{cur[1]}<button className="ic" aria-label="Close" title="Close" onClick={() => setOpen(null)}><X size={18} /></button></h3>
+            <h3><span className="sic sm"><CurIcon size={20} /></span>{cur[1]}<button className="ic" aria-label="Close" title="Close" onClick={() => setOpen(null)}><X size={18} /></button></h3>
             {PANELS[open]}
           </div>
         </div>

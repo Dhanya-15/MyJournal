@@ -501,3 +501,40 @@ button.mini{display:block;width:100%;text-align:left}
 .lrow{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--pale)}.lrow .link{margin-left:12px}
 @media(max-width:760px){.seg button{padding:7px 11px;font-size:.88rem}.plabel{min-width:0}.stiles{grid-template-columns:repeat(2,1fr);gap:12px}.stile{padding:20px 10px}.sic{width:54px;height:54px}.stile small{font-size:.74rem}}
 @media(prefers-reduced-motion:reduce){.gdot,.stile,.spcard,.gtip{animation:none}.gcard,.stile,.sic{transition:none}}
+
+/* ===== SETTINGS: 3D animated background (keep at the END) ===== */
+@keyframes sb-float{0%,100%{transform:translate3d(0,0,0) rotateX(0) rotateY(0)}50%{transform:translate3d(18px,-34px,60px) rotateX(18deg) rotateY(-22deg)}}
+@keyframes sb-drift{0%{transform:translate3d(0,0,0) rotate(0) rotateY(0)}50%{transform:translate3d(-30px,40px,80px) rotate(160deg) rotateY(180deg)}100%{transform:translate3d(0,0,0) rotate(360deg) rotateY(360deg)}}
+@keyframes sb-orbit{from{transform:rotateX(68deg) rotateZ(0)}to{transform:rotateX(68deg) rotateZ(360deg)}}
+
+.sbg{position:fixed;inset:0 0 0 216px;z-index:0;pointer-events:none;overflow:hidden;perspective:900px;perspective-origin:50% 40%}
+.stiles,.page>h1,.page>.sub{position:relative;z-index:1}
+.sbg i{position:absolute;display:block;transform-style:preserve-3d;will-change:transform}
+
+/* soft glowing orbs */
+.sbg .o{border-radius:50%;background:radial-gradient(circle at 32% 28%,rgba(255,255,255,.9),rgba(145,173,146,.5) 45%,rgba(72,111,89,.18) 75%);box-shadow:inset -10px -14px 30px rgba(72,111,89,.25),0 20px 40px rgba(72,111,89,.15);animation:sb-float 11s ease-in-out infinite}
+.sbg .o1{width:190px;height:190px;left:6%;top:12%}
+.sbg .o2{width:120px;height:120px;right:9%;top:30%;animation-duration:14s;animation-delay:-4s;background:radial-gradient(circle at 32% 28%,rgba(255,255,255,.9),rgba(217,178,92,.45) 50%,rgba(217,178,92,.12) 78%)}
+.sbg .o3{width:150px;height:150px;left:42%;bottom:6%;animation-duration:16s;animation-delay:-8s}
+
+/* tumbling leaves */
+.sbg .lf{width:56px;height:56px;border-radius:0 100% 0 100%;background:linear-gradient(135deg,#a9c9a8,#4f7d5c);opacity:.5;box-shadow:0 10px 18px rgba(40,70,50,.2);animation:sb-drift 18s ease-in-out infinite}
+.sbg .l1{left:26%;top:8%}
+.sbg .l2{right:22%;top:12%;width:42px;height:42px;animation-duration:22s;animation-delay:-6s}
+.sbg .l3{left:12%;bottom:14%;width:48px;height:48px;animation-duration:20s;animation-delay:-11s}
+.sbg .l4{right:12%;bottom:18%;width:64px;height:64px;animation-duration:25s;animation-delay:-3s}
+
+/* golden orbit rings */
+.sbg .rg{border-radius:50%;border:2px solid rgba(217,178,92,.55);box-shadow:0 0 16px rgba(217,178,92,.25);animation:sb-orbit 20s linear infinite}
+.sbg .r1{width:300px;height:300px;right:4%;bottom:6%}
+.sbg .r2{width:210px;height:210px;left:3%;top:42%;animation-duration:28s;animation-direction:reverse}
+
+[data-theme=dark] .sbg .o{opacity:.45}
+[data-theme=dark] .sbg .lf{opacity:.35}
+@media(max-width:760px){
+  .sbg{left:0}
+  .sbg .o1{width:120px;height:120px}.sbg .o2{width:80px;height:80px}.sbg .o3{width:100px;height:100px}
+  .sbg .r1{width:200px;height:200px}.sbg .r2{display:none}
+  .sbg .l3,.sbg .l4{display:none}
+}
+@media(prefers-reduced-motion:reduce){.sbg i{animation:none}}
