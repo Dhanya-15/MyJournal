@@ -262,3 +262,58 @@ body.portal-in .main{animation:pt-reveal 1.1s cubic-bezier(.2,.8,.2,1) both}
 }
 @media(max-height:640px){.pt .lead{display:none}}
 @media(prefers-reduced-motion:reduce){.pt-in{opacity:1;animation:none}.gs-wrap,.gs-ring,.pt-ring,.pc-in{animation:none}.pc,.pt-cards,.pt-portal{transition:none}.pt-dots .on::after{animation:none}}
+
+/* ===== WELCOME: fuller scene (keep at the VERY END of styles.css) ===== */
+@keyframes dc-fall{0%{transform:translate(0,-12vh) rotate(0)}50%{transform:translate(34px,52vh) rotate(180deg)}100%{transform:translate(-10px,112vh) rotate(360deg)}}
+@keyframes dc-tw{0%,100%{opacity:.1;transform:scale(.6)}50%{opacity:.9;transform:scale(1)}}
+@keyframes dc-sway{0%,100%{transform:rotate(-1.6deg)}50%{transform:rotate(1.6deg)}}
+
+/* background: sunlight streaks + soft sage and gold glows */
+.main:has(.pt)::before{content:'';position:absolute;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(620px 420px at 88% 12%,rgba(145,173,146,.38),transparent 70%),
+    radial-gradient(520px 380px at 6% 96%,rgba(217,178,92,.2),transparent 70%),
+    repeating-linear-gradient(118deg,transparent 0 130px,rgba(255,255,255,.4) 130px 200px);
+  -webkit-mask-image:linear-gradient(to bottom left,#000 25%,transparent 85%);mask-image:linear-gradient(to bottom left,#000 25%,transparent 85%)}
+[data-theme=dark] .main:has(.pt)::before{opacity:.35}
+
+/* decoration layer */
+.main>.deco-wrap{position:absolute!important;inset:0;z-index:0!important;pointer-events:none;overflow:hidden}
+.main>.pt{z-index:1}
+.br{position:absolute;width:clamp(150px,20vw,290px);opacity:.92;animation:dc-sway 9s ease-in-out infinite}
+.br-tl{left:-14px;top:-14px;transform-origin:0 0}
+.br-br{right:-14px;bottom:-14px;transform-origin:100% 100%;animation-delay:-4s}
+.fl{position:absolute;top:0;opacity:.5;filter:drop-shadow(0 2px 3px rgba(40,70,50,.2));animation:dc-fall var(--du,26s) linear var(--d,0s) infinite}
+.sp{position:absolute;width:5px;height:5px;border-radius:50%;background:#e7c670;box-shadow:0 0 10px 2px rgba(217,178,92,.6);animation:dc-tw 4s ease-in-out var(--d,0s) infinite}
+
+/* layout: the trust bar becomes a bottom row; bigger text and portal on desktop */
+.pt{grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);grid-template-rows:minmax(0,1fr) auto;row-gap:clamp(8px,2vh,22px)}
+.pt-h{font-size:clamp(2.6rem,8.6vh,4.8rem)}
+.pt .lead{font-size:clamp(1.02rem,2.4vh,1.3rem)}
+.pt-stage{--dv:1.2;--kx:.68;--cw:.7;--ch:.88}
+.pt-stage::before{content:'';position:absolute;left:50%;bottom:2%;width:62%;height:7%;transform:translateX(-50%);border-radius:50%;background:radial-gradient(closest-side,rgba(60,95,72,.28),transparent);filter:blur(6px)}
+
+.pt-trust{grid-column:1/-1;list-style:none;margin:0;padding:12px 22px;display:flex;gap:clamp(12px,3vw,40px);align-items:center;justify-content:space-between;border-radius:20px;
+  background:rgba(255,255,255,.58);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.8);box-shadow:0 10px 30px rgba(60,80,60,.08)}
+[data-theme=dark] .pt-trust{background:rgba(35,46,39,.7);border-color:rgba(255,255,255,.08)}
+.pt-trust li{display:flex;gap:12px;align-items:center;flex:1;min-width:0}
+.pt-trust li>svg{flex:none;width:38px;height:38px;padding:9px;border-radius:50%;background:var(--pale);color:var(--forest)}
+.pt-trust b{display:block;font-size:.9rem;font-weight:500}
+.pt-trust small{display:block;color:var(--muted);font-size:.76rem;line-height:1.35}
+
+/* tablets and phones */
+@media(max-width:860px){
+  .pt{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto;row-gap:6px}
+  .pt-h{font-size:clamp(1.8rem,5.4vh,2.5rem)}
+  .pt .lead{font-size:.88rem}
+  .pt-stage{--dv:1.15;--kx:.46;--cw:.78;--ch:.92}
+  .br{width:105px;opacity:.6}
+  .fl{opacity:.4}
+  .pt-trust{padding:8px 10px;gap:6px;border-radius:16px}
+  .pt-trust li{flex-direction:column;gap:4px;text-align:center;justify-content:center}
+  .pt-trust li>svg{width:30px;height:30px;padding:7px}
+  .pt-trust b{font-size:.68rem;line-height:1.2}
+  .pt-trust small{display:none}
+}
+@media(max-height:640px){.pt-trust{display:none}}
+@media(prefers-reduced-motion:reduce){.br,.fl,.sp{animation:none}}

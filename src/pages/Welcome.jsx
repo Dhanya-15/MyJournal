@@ -2,8 +2,9 @@ import { useNavigate } from 'react-router-dom'
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useApp } from '../store.jsx'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, Lock, Leaf, Heart } from 'lucide-react'
 import Art from '../WelcomeArt.jsx'
+import Deco from '../WelcomeDeco.jsx'
 
 const S = [
   ['01', 'Write Freely', 'Capture your thoughts, memories and little moments.', 's1'],
@@ -59,6 +60,7 @@ export default function Welcome() {
 
   return (
     <>
+      <Deco />
       <div className={'pt' + (portal ? ' zoom' : '')}>
         <section className="pt-text">
           <p className="eyebrow pt-in" style={{ '--d': '0s' }}>Welcome to MyJournal</p>
@@ -98,6 +100,12 @@ export default function Welcome() {
             {S.map((_, k) => <button key={k} className={k === i ? 'on' : ''} aria-label={'Show card ' + (k + 1)} onClick={() => setI(k)} />)}
           </div>
         </div>
+
+        <ul className="pt-trust pt-in" style={{ '--d': '.6s' }}>
+          <li><Lock size={18} /><span><b>Your data stays private</b><small>Stored safely in your browser. No account needed.</small></span></li>
+          <li><Leaf size={18} /><span><b>Simple and peaceful</b><small>A clean space with minimal distractions.</small></span></li>
+          <li><Heart size={18} /><span><b>Built for your wellbeing</b><small>Write, reflect and feel better every day.</small></span></li>
+        </ul>
       </div>
 
       {portal && createPortal(
