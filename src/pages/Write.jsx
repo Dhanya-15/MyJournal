@@ -13,7 +13,7 @@ export default function Write() {
   const { entries, upsert, collections, setCollections, settings } = useApp()
   const ex = entries.find((e) => e.id === q.get('id') && !e.locked)
   const draftKey = 'mj_draft'
-  const base = ex || JSON.parse(localStorage.getItem(draftKey) || 'null') || { title: '', body: q.get('prompt') ? q.get('prompt') + '\n\n' : '', date: today(), mood: null, collection: 'Unfiled', tags: [] }
+  const base = ex || JSON.parse(localStorage.getItem(draftKey) || 'null') || { title: '', body: q.get('prompt') ? q.get('prompt') + '\n\n' : '', date: today(), mood: null, collection: settings.defaultCol || 'Unfiled', tags: [] }
   const [f, setF] = useState(!ex && q.get('date') ? { ...base, date: q.get('date') } : base)
   const [tag, setTag] = useState('')
   const [lock, setLock] = useState(false)

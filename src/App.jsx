@@ -65,7 +65,7 @@ function Shell({ children }) {
         <header className="top">
           <button className="burger" aria-label="Open menu" onClick={() => setOpen(!open)}><Menu /></button>
           <SearchBox entries={entries} nav={nav} />
-          <button className="ic avatar" aria-label="Profile and settings" title="Profile & settings" onClick={() => nav('/settings')}>🌿</button>
+          <button className="ic avatar" aria-label="Profile and settings" title="Profile & settings" onClick={() => nav('/settings')}>{settings.avatar || '🌿'}</button>
           <button className="ic" aria-label={dark ? 'Switch to light theme' : 'Switch to dark theme'} title={dark ? 'Light theme' : 'Dark theme'} onClick={() => setSettings({ ...settings, theme: dark ? 'light' : 'dark' })}>
             {dark ? <Sun size={19} /> : <Moon size={19} />}
           </button>

@@ -1,37 +1,121 @@
-import { useState } from 'react'
-import { format, isSameMonth, subMonths, differenceInCalendarDays } from 'date-fns'
-import { Bar, BarChart, Cell, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
-import { MOODS, moodOf, useApp } from '../store.jsx'
+import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { addDays, addMonths, addWeeks, addYears, differenceInCalendarDays, eachDayOfInterval, endOfDay, endOfMonth, endOfWeek, endOfYear, format, parseISO, startOfDay, startOfMonth, startOfWeek, startOfYear } from 'date-fns'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { CartesianGrid, ResponsiveContainer, Scatter, ScatterChart, Tooltip, XAxis, YAxis } from 'recharts'
+import { MOODS, moodOf, today, useApp } from '../store.jsx'
+
+const RANGES = ['Day', 'Week', 'Month', 'Year', 'Custom']
 
 export default function Mood() {
   const nav = useNavigate()
-  const { moods } = useApp()
-  const [f, setF] = useState('month')
+  const { moods, entries } = useApp()
+  const [r, setR] = useState('Week')
+  const [off, setOff] = useState(0)
+  const [cf, setCf] = useState(format(addDays(new Date(), -29), 'yyyy-MM-dd'))
+  const [ct, setCt] = useState(today())
   const now = new Date()
-  const rows = Object.entries(moods).map(([d, m]) => ({ d: new Date(d + 'T00:00'), m })).filter(({ d }) => f === 'all' ? true : f === 'week' ? differenceInCalendarDays(now, d) >= 0 && differenceInCalendarDays(now, d) < 7 : f === 'month' ? isSameMonth(d, now) : isSameMonth(d, subMonths(now, 1))).sort((a, b) => a.d - b.d)
-  const counts = MOODS.map((m) => ({ ...m, n: rows.filter((r) => r.m === m.k).length }))
-  const top = [...counts].sort((a, b) => b.n - a.n)[0]
-  const wk = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map((day, i) => ({ day, ...Object.fromEntries(MOODS.map((m) => [m.k, rows.filter((r) => r.d.getDay() === i && r.m === m.k).length])) }))
-  const pct = (n) => (rows.length ? Math.round((n / rows.length) * 100) : 0)
+
+  let s, e
+  if (r === 'Day') { s = startOfDay(addDays(now, off)); e = endOfDay(s) }
+  else if (r === 'Week') { s = startOfWeek(addWeeks(now, off)); e = endOfWeek(s) }
+  else if (r === 'Month') { s = startOfMonth(addMonths(now, off)); e = endOfMonth(s) }
+  else if (r === 'Year') { s = startOfYear(addYears(now, off)); e = endOfYear(s) }
+  else { s = startOfDay(parseISO(cf)); e = endOfDay(parseISO(ct)) }
+  const bad = r === 'Custom' && s > e
+  const sk = format(s, 'yyyy-MM-dd'), ek = format(e, 'yyyy-MM-dd')
+
+  const pts = useMemo(() => {
+    if (bad) return []
+    let p
+    if (r === 'Day') {
+      p = entries.filter((x) => x.date === sk && x.mood && !x.draft).map((x) => { const t = new Date(x.created); return { x: t.getHours() + t.getMinutes() / 60, mood: x.mood, label: x.locked ? 'Private entry' : (x.title || 'Untitled') } })
+    } else {
+      p = Object.entries(moods).filter(([d]) => d >= sk && d <= ek).map(([d, m]) => ({ x: parseISO(d).getTime() + 432e5, mood: m, label: format(parseISO(d), 'EEE, MMM d') }))
+    }
+    return p.sort((a, b) => a.x - b.x).map((q) => ({ ...q, y: 5 - MOODS.findIndex((m) => m.k === q.mood) }))
+  }, [r, sk, ek, moods, entries, bad])
+
+  const days = differenceInCalendarDays(e, s) + 1
+  let domain, ticks, fmt
+  if (r === 'Day') { domain = [0, 24]; ticks = [0, 3, 6, 9, 12, 15, 18, 21, 24]; fmt = (v) => String(v).padStart(2, '0') + ':00' }
+  else {
+    domain = [s.getTime(), e.getTime()]
+    if (r === 'Year') { ticks = Array.from({ length: 12 }, (_, i) => new Date(s.getFullYear(), i, 1).getTime()); fmt = (v) => format(v, 'MMM') }
+    else { const st = Math.max(1, Math.ceil(days / 7)); ticks = bad ? [] : eachDayOfInterval({ start: s, end: e }).filter((_, i) => i % st === 0).map((d) => d.getTime() + 432e5); fmt = (v) => format(v, days <= 8 ? 'EEE d' : 'd MMM') }
+  }
+  const label = r === 'Day' ? format(s, 'EEEE, MMM d') : r === 'Week' ? `${format(s, 'd MMM')} – ${format(e, 'd MMM')}` : r === 'Month' ? format(s, 'MMMM yyyy') : r === 'Year' ? format(s, 'yyyy') : ''
+  const dense = pts.length > 45
+  const checkin = r === 'Day' ? moodOf(moods[sk]) : null
+
+  const Dot = ({ cx, cy, payload }) => {
+    if (cx == null) return null
+    const m = moodOf(payload.mood), rad = dense ? 5 : 15
+    return (
+      <g className="gdot">
+        <circle cx={cx} cy={cy} r={rad + 5} fill={m.c} opacity=".25" />
+        <circle cx={cx} cy={cy} r={rad} fill={m.c} stroke="#fff" strokeWidth="2" />
+        {!dense && <text x={cx} y={cy + 5} textAnchor="middle" fontSize="15">{m.e}</text>}
+      </g>
+    )
+  }
+  const tilt = (ev) => {
+    if (ev.pointerType !== 'mouse') return
+    const b = ev.currentTarget.getBoundingClientRect()
+    ev.currentTarget.style.setProperty('--ry', (((ev.clientX - b.left) / b.width - 0.5) * 4).toFixed(2) + 'deg')
+    ev.currentTarget.style.setProperty('--rx', (-((ev.clientY - b.top) / b.height - 0.5) * 4).toFixed(2) + 'deg')
+  }
+  const untilt = (ev) => { ev.currentTarget.style.setProperty('--rx', '0deg'); ev.currentTarget.style.setProperty('--ry', '0deg') }
+
   return (
     <>
-      <p className="eyebrow">Mood Insights</p><h1>Understand Your Journey</h1><p className="sub">See patterns, celebrate progress, and know yourself better.</p>
-      <div className="row wrap pills">{[['week','This Week'],['month','This Month'],['prev','Previous Month'],['all','All Time']].map(([k, l]) => <button key={k} className={'tab ' + (f === k ? 'on' : '')} onClick={() => setF(k)}>{l}</button>)}</div>
-      {rows.length === 0 ? <div className="empty card"><h3>Every feeling has a place here.</h3><button className="btn" onClick={() => nav('/home')}>Record Today's Mood</button></div> : (<>
-        <div className="mtop">
-          <section className="card"><img className="moodart" src="/images/mood-art.jpg" alt="" /><h3>Overall Mood</h3><p className="sub">A snapshot of how you felt.</p>
-            <div className="row wrap"><div style={{ width: 190, height: 190, position: 'relative' }}><ResponsiveContainer><PieChart><Pie data={counts.filter((c) => c.n)} dataKey="n" nameKey="l" innerRadius={58} outerRadius={88} animationDuration={900}>{counts.filter((c) => c.n).map((c) => <Cell key={c.k} fill={c.c} />)}</Pie><Tooltip /></PieChart></ResponsiveContainer>
-              <div className="donut"><b>{rows.length}</b><small>Check-ins</small></div></div>
-              <ul className="leg">{counts.map((c) => <li key={c.k}><i style={{ background: c.c }} />{c.l}<b>{pct(c.n)}%</b></li>)}</ul></div></section>
-          <section className="card quoteC"><p className="serif">“Every feeling you record is a small act of kindness to yourself.”</p><small>You tracked {new Set(rows.map((r) => +r.d)).size} days. Most common: {top.e} {top.l}.</small></section>
+      <h1>Understand Your Journey</h1>
+      <p className="sub">See how your moods flow over time.</p>
+
+      <div className="row between wrap mfilter">
+        <div className="seg" role="tablist" aria-label="Time range">
+          {RANGES.map((x) => <button key={x} role="tab" aria-selected={r === x} className={r === x ? 'on' : ''} onClick={() => { setR(x); setOff(0) }}>{x}</button>)}
         </div>
-        <div className="three">
-          <section className="card"><h3>Mood Trend</h3><p className="sub">How your moods changed over time.</p><div className="trend">{rows.map((r) => <i key={+r.d} title={format(r.d, 'PP') + ' · ' + moodOf(r.m).l} style={{ background: moodOf(r.m).c }} />)}</div></section>
-          <section className="card"><h3>Mood by Day of Week</h3><div style={{ height: 180 }}><ResponsiveContainer><BarChart data={wk}><XAxis dataKey="day" tickLine={false} /><YAxis hide /><Tooltip />{MOODS.map((m) => <Bar key={m.k} dataKey={m.k} stackId="a" fill={m.c} radius={2} />)}</BarChart></ResponsiveContainer></div></section>
-          <section className="card"><h3>Mood Calendar</h3><div className="heat">{rows.map((r) => <i key={+r.d} title={format(r.d, 'PP')} style={{ background: moodOf(r.m).c }} />)}</div></section>
+        {r !== 'Custom' ? (
+          <div className="row">
+            <button className="ic" aria-label="Previous period" title="Previous" onClick={() => setOff(off - 1)}><ChevronLeft /></button>
+            <b className="plabel">{label}</b>
+            <button className="ic" aria-label="Next period" title="Next" disabled={off >= 0} onClick={() => setOff(off + 1)}><ChevronRight /></button>
+          </div>
+        ) : (
+          <div className="row wrap">
+            <label className="dl">From<input type="date" className="inp" value={cf} max={ct} onChange={(ev) => setCf(ev.target.value)} /></label>
+            <label className="dl">To<input type="date" className="inp" value={ct} min={cf} max={today()} onChange={(ev) => setCt(ev.target.value)} /></label>
+          </div>
+        )}
+      </div>
+      {bad && <p className="err" role="alert">The start date must be before the end date.</p>}
+
+      <section className="gcard" onPointerMove={tilt} onPointerLeave={untilt}>
+        <div className="row between wrap">
+          <div className="lg">{MOODS.map((m) => <span key={m.k} title={m.l}><i style={{ background: m.c }}>{m.e}</i>{pts.filter((p) => p.mood === m.k).length}</span>)}</div>
+          {checkin && <span className="chip">Check-in: {checkin.e} {checkin.l}</span>}
         </div>
-        <section className="card mt"><h3>Insights</h3><p>{rows.length >= 5 ? `You recorded “${top.l}” most often — ${pct(top.n)}% of your check-ins.` : 'Record a few more check-ins to see observations.'}</p></section></>)}
+        {pts.length === 0 ? (
+          <div className="gempty"><h3>Every feeling has a place here.</h3><p className="sub">{r === 'Day' ? 'No entries with a mood on this day.' : 'No mood check-ins in this period.'}</p><button className="btn" onClick={() => nav('/home')}>Record Today's Mood</button></div>
+        ) : (
+          <div className="gbox" key={r + off + cf + ct}>
+            <ResponsiveContainer width="100%" height="100%">
+              <ScatterChart margin={{ top: 14, right: 18, bottom: 6, left: 0 }}>
+                <CartesianGrid strokeDasharray="3 6" stroke="var(--pale)" />
+                <XAxis type="number" dataKey="x" domain={domain} ticks={ticks} tickFormatter={fmt} tick={{ fill: 'var(--muted)', fontSize: 12 }} tickLine={false} axisLine={false} allowDataOverflow />
+                <YAxis type="number" dataKey="y" domain={[-0.5, 5.5]} ticks={[0, 1, 2, 3, 4, 5]} tickFormatter={(v) => MOODS[5 - v].e} tick={{ fontSize: 18 }} width={42} tickLine={false} axisLine={false} />
+                <Tooltip cursor={{ strokeDasharray: '4 4', stroke: 'var(--sage)' }} content={({ active, payload }) => {
+                  if (!active || !payload?.length) return null
+                  const p = payload[0].payload, m = moodOf(p.mood)
+                  return <div className="gtip"><span>{m.e}</span><b>{m.l}</b><small>{p.label}</small></div>
+                }} />
+                <Scatter data={pts} shape={Dot} line={{ stroke: '#91ad92', strokeOpacity: 0.55, strokeWidth: 2 }} lineType="joint" animationDuration={900} />
+              </ScatterChart>
+            </ResponsiveContainer>
+          </div>
+        )}
+      </section>
     </>
   )
 }
