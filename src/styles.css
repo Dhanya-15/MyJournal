@@ -538,3 +538,65 @@ button.mini{display:block;width:100%;text-align:left}
   .sbg .l3,.sbg .l4{display:none}
 }
 @media(prefers-reduced-motion:reduce){.sbg i{animation:none}}
+
+/* ===== SETTINGS: Sunlit Botanical Garden (keep at the END) ===== */
+@keyframes sg-sway{0%,100%{transform:rotateZ(-1.8deg) rotateY(-6deg)}50%{transform:rotateZ(2.2deg) rotateY(7deg)}}
+@keyframes sg-shade{0%,100%{transform:translate(0,0) rotate(18deg) scale(1)}50%{transform:translate(24px,16px) rotate(30deg) scale(1.07)}}
+@keyframes sg-breathe{0%,100%{opacity:.85}50%{opacity:1}}
+@keyframes sg-fi{0%,100%{transform:translateY(0) rotateX(0) rotateY(0)}50%{transform:translateY(-12px) rotateX(14deg) rotateY(-14deg)}}
+
+.sg{position:fixed;inset:0 0 0 216px;z-index:0;overflow:hidden;pointer-events:none;perspective:900px;perspective-origin:50% 40%;
+  background:linear-gradient(155deg,#fdf8ea 0%,#f6f2e4 45%,#e9eedf 100%)}
+.sg>div{position:absolute;inset:0;transform-style:preserve-3d;will-change:transform;transition:transform .35s ease-out}
+.sg-far{transform:translate3d(calc(var(--px,0)*-6px),calc(var(--py,0)*-4px),0)}
+.sg-mid{transform:translate3d(calc(var(--px,0)*-14px),calc(var(--py,0)*-9px),0)}
+.sg-near{transform:translate3d(calc(var(--px,0)*-24px),calc(var(--py,0)*-16px),0)}
+.page>h1,.page>.sub,.stiles{position:relative;z-index:1}
+
+/* morning sun: warm glow in the corner plus soft rays */
+.sun{position:absolute;right:-12%;top:-26%;width:84vmax;height:84vmax;border-radius:50%;
+  background:radial-gradient(circle at 68% 34%,rgba(255,234,168,.6),rgba(255,234,168,.2) 34%,transparent 62%);animation:sg-breathe 11s ease-in-out infinite}
+.sun::after{content:'';position:absolute;inset:0;border-radius:50%;
+  background:repeating-linear-gradient(118deg,transparent 0 90px,rgba(255,247,215,.3) 90px 150px);
+  -webkit-mask-image:radial-gradient(circle at 68% 34%,#000,transparent 62%);mask-image:radial-gradient(circle at 68% 34%,#000,transparent 62%)}
+
+/* leaf shadows drifting slowly */
+.shd{position:absolute;border-radius:50%;background:rgba(39,63,50,.12);filter:blur(7px);animation:sg-shade 15s ease-in-out infinite}
+.s1{width:110px;height:140px;right:8%;top:6%}
+.s2{width:84px;height:108px;right:17%;top:17%;animation-delay:-5s}
+.s3{width:96px;height:124px;right:3%;top:30%;animation-delay:-9s}
+.s4{width:90px;height:116px;left:6%;bottom:12%;animation-delay:-3s}
+.s5{width:70px;height:92px;left:13%;bottom:24%;animation-delay:-11s}
+
+/* eucalyptus branches at the edges */
+.br{position:absolute;width:clamp(170px,20vw,300px);perspective:700px}
+.br svg{display:block;width:100%;height:auto;overflow:visible;transform-origin:4% 96%;animation:sg-sway 9s ease-in-out infinite;filter:drop-shadow(0 8px 10px rgba(40,70,50,.18))}
+.b-l{left:-34px;top:30%}
+.b-r{right:-34px;top:-10px;transform:scale(-1,-1)}
+.b-b{right:-30px;bottom:-26px;transform:scaleX(-1)}
+.b-r svg{animation-delay:-3s}.b-b svg{animation-delay:-6s}
+
+/* floating icons along the edges (center stays clear) */
+.fi{position:absolute;width:46px;height:46px;border-radius:16px;display:grid;place-items:center;background:rgba(255,255,255,.72);color:var(--forest);
+  box-shadow:0 10px 22px rgba(40,70,50,.16),inset 0 1px 0 #fff;animation:sg-fi 8s ease-in-out infinite}
+.f1{left:2.5%;top:18%}.f2{left:5%;top:50%;animation-delay:-2s}.f3{left:2%;top:78%;animation-delay:-4s}
+.f4{right:3%;top:32%;animation-delay:-1s}.f5{right:6%;top:62%;animation-delay:-3s}.f6{right:2.5%;top:84%;animation-delay:-5s}
+
+[data-theme=dark] .sg{background:linear-gradient(155deg,#1b2620,#171E1A 60%,#1c2a22)}
+[data-theme=dark] .sun{opacity:.22}
+[data-theme=dark] .shd{background:rgba(0,0,0,.25)}
+[data-theme=dark] .br svg{filter:brightness(.7) drop-shadow(0 8px 10px rgba(0,0,0,.35))}
+[data-theme=dark] .fi{background:rgba(52,74,58,.8);color:#a8c6ab}
+@media(min-width:761px){.main:has(.sg) .top{background:none}}
+
+/* phones: same scene, lighter and without mouse parallax */
+@media(max-width:760px){
+  .sg{left:0}
+  .br{width:150px}
+  .b-l{top:38%;left:-40px}
+  .s4,.s5{display:none}
+  .fi{width:38px;height:38px;border-radius:13px}
+  .f1{left:1.5%;top:22%}.f2{left:2%;top:58%}.f4{right:1.5%;top:34%}.f5{right:2%;top:68%}
+  .f3,.f6{display:none}
+}
+@media(prefers-reduced-motion:reduce){.br svg,.shd,.sun,.fi{animation:none}.sg>div{transition:none}}

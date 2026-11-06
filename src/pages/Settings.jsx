@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Database, FolderTree, Info, PenLine, ShieldCheck, UserRound, X } from 'lucide-react'
 import { useApp } from '../store.jsx'
+import SettingsGarden from '../SettingsGarden.jsx'
 
 const TILES = [
   ['profile', 'Profile', UserRound, 'Name and avatar'],
@@ -93,11 +94,7 @@ export default function Settings() {
   
   return (
     <>
-      <div className="sbg" aria-hidden="true">
-        <i className="o o1" /><i className="o o2" /><i className="o o3" />
-        <i className="lf l1" /><i className="lf l2" /><i className="lf l3" /><i className="lf l4" />
-        <i className="rg r1" /><i className="rg r2" />
-      </div>
+      <SettingsGarden />
       <h1>Customize Your Space</h1>
       <p className="sub">Make MyJournal truly yours. Pick an icon to change its settings.</p>
       <div className="stiles">
