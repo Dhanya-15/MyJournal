@@ -407,6 +407,60 @@ body.portal-in .main{animation:pt-reveal 1.1s cubic-bezier(.2,.8,.2,1) both}
 
 /* Write Journal */
 .wj .paper{margin-top:4px}
+
+/* WRITE JOURNAL - FULL PAGE BACKGROUND */
+
+.wj-bg {
+  width: 100%;
+  min-height: 100dvh;
+
+  background-image: url('/images/write-journal-desktop.png');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+
+  box-sizing: border-box;
+  position: relative;
+}
+
+/* Keep existing journal content styling */
+.wj-bg > .wj {
+  background: transparent;
+  padding-top: 32px;
+  padding-bottom: 48px;
+}
+
+/* Soft glass-effect writing editor */
+.wj-bg .paper {
+  background: rgba(255, 253, 247, 0.90);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  box-shadow: 0 12px 36px rgba(30, 55, 40, 0.12);
+}
+
+/* MOBILE BACKGROUND */
+@media (max-width: 767px) {
+  .wj-bg {
+    background-image: url('/images/write-journal-mobile.png');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    min-height: 100dvh;
+  }
+
+  .wj-bg > .wj {
+    padding-top: 20px;
+    padding-bottom: 32px;
+  }
+
+  .wj-bg .paper {
+    background: rgba(255, 253, 247, 0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+}
 .wj .body{min-height:max(320px,calc(100dvh - 400px))}
 .pcar{display:flex;align-items:center;gap:6px;margin:12px 0;padding:5px 8px;border-radius:30px;background:var(--surface);box-shadow:var(--sh);animation:floaty 7s ease-in-out infinite;touch-action:pan-y;overflow:hidden}
 .pcar .pr2{flex:1;min-width:0;text-align:center;padding:8px 10px;font-family:'Caveat',cursive;font-size:1.4rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;animation:slideL .5s both}

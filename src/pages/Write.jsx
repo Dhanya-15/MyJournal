@@ -65,6 +65,7 @@ export default function Write() {
   const toggle = (k) => setPop(pop === k ? null : k)
 
   return (
+    <div className="wj-bg">
     <div className="wj" onKeyDown={(e) => e.key === 'Escape' && setPop(null)}>
       <h1>Write Your Journal</h1>
       <p className="sub">Capture your thoughts, feelings and moments.</p>
@@ -119,6 +120,7 @@ export default function Write() {
         </div>
         {err && <p className="err" role="alert">{err}</p>}
       </section>
+      </div>
     </div>
   )
 }
