@@ -408,59 +408,72 @@ body.portal-in .main{animation:pt-reveal 1.1s cubic-bezier(.2,.8,.2,1) both}
 /* Write Journal */
 .wj .paper{margin-top:4px}
 
-/* WRITE JOURNAL - FULL PAGE BACKGROUND */
+/* FULL-SCREEN WRITE JOURNAL BACKGROUND */
 
 .wj-bg {
+  position: relative;
+  isolation: isolate;
   width: 100%;
   min-height: 100dvh;
+  background: transparent !important;
+}
 
-  background-image: url('/images/writejournal2.png');
+/* Background fills the viewport, even behind parent padding */
+.wj-bg::before {
+  content: "";
+  position: fixed;
+
+  /* Desktop: exclude the fixed sidebar */
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: var(--wj-sidebar-width, 216px);
+
+  background-image: url("/images/writejournal2.png");
   background-size: cover;
-  background-position: center center;
+  background-position: center;
   background-repeat: no-repeat;
 
-  box-sizing: border-box;
-  position: relative;
+  z-index: -1;
+  pointer-events: none;
 }
 
-/* Keep existing journal content styling */
+/* Journal content */
 .wj-bg > .wj {
-  background: transparent;
-  padding-top: 32px;
-  padding-bottom: 48px;
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  min-height: 100dvh;
+  box-sizing: border-box;
+  background: transparent !important;
 }
 
-/* Soft glass-effect writing editor */
+/* Writing editor */
 .wj-bg .paper {
-  background: rgba(255, 253, 247, 0.90);
+  background: rgba(255, 253, 247, 0.91) !important;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-
-  border: 1px solid rgba(255, 255, 255, 0.65);
-  box-shadow: 0 12px 36px rgba(30, 55, 40, 0.12);
+  border-radius: 22px;
 }
 
-/* MOBILE BACKGROUND */
+/* MOBILE VIEW */
 @media (max-width: 767px) {
-  .wj-bg {
-    background-image: url('/images/writejournal1.png');
+  .wj-bg::before {
+    left: 0;
+    background-image: url("/images/writejournal1.png");
+    background-position: center;
     background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    min-height: 100dvh;
   }
 
   .wj-bg > .wj {
-    padding-top: 20px;
-    padding-bottom: 32px;
+    min-height: 100dvh;
   }
 
   .wj-bg .paper {
-    background: rgba(255, 253, 247, 0.92);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    background: rgba(255, 253, 247, 0.93) !important;
   }
 }
+
 .wj .body{min-height:max(320px,calc(100dvh - 400px))}
 .pcar{display:flex;align-items:center;gap:6px;margin:12px 0;padding:5px 8px;border-radius:30px;background:var(--surface);box-shadow:var(--sh);animation:floaty 7s ease-in-out infinite;touch-action:pan-y;overflow:hidden}
 .pcar .pr2{flex:1;min-width:0;text-align:center;padding:8px 10px;font-family:'Caveat',cursive;font-size:1.4rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;animation:slideL .5s both}
