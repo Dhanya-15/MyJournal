@@ -956,3 +956,55 @@ button.mini{display:block;width:100%;text-align:left}
   .l2,.l3{display:none}
 }
 @media(prefers-reduced-motion:reduce){.rw *{animation:none!important}.rw-obj,.rw-base,.rw-rain{transition:none}}
+
+/* ===== HOME: Forest Canopy Calm (keep at the VERY END) ===== */
+@keyframes hb-sway{0%,100%{transform:rotate(-.6deg)}50%{transform:rotate(.8deg)}}
+@keyframes hb-rays{0%{transform:translateX(-5%);opacity:.35}100%{transform:translateX(6%);opacity:.75}}
+@keyframes hb-ff{0%{transform:translate(0,0)}50%{transform:translate(var(--dx,40px),var(--dy,-50px))}100%{transform:translate(calc(var(--dx,40px)*-.5),calc(var(--dy,-50px)*.6))}}
+@keyframes hb-blink{0%,100%{opacity:.15}50%{opacity:1}}
+@keyframes hb-glow{0%,100%{opacity:.45;transform:translate(-50%,-50%) scale(.92)}50%{opacity:.95;transform:translate(-50%,-50%) scale(1.15)}}
+
+.hbg{position:fixed;inset:0 0 0 216px;z-index:-1;overflow:hidden;pointer-events:none;background:#1f3a24;
+  --w:max(calc(100vw - 216px),calc(100vh*1.7066));--wm:max(100vw,calc(100dvh*.5146))}
+@media(min-width:761px){.main:has(.hbg) .top{background:none}}
+
+/* the picture: sized to always cover the area, so glow positions line up */
+.hb-art{position:absolute;left:50%;top:50%;width:var(--w);height:calc(var(--w)/1.7066);
+  transform:translate(-50%,-50%) translate3d(calc(var(--px,0)*-10px),calc(var(--py,0)*-6px),0) scale(1.05);transition:transform .45s ease-out}
+.hb-art img{position:absolute;inset:0;width:100%;height:100%;display:block}
+/* only the upper part (leaves and branch) sways */
+.hb-art .hb-sw{transform-origin:20% 0;animation:hb-sway 11s ease-in-out infinite;
+  -webkit-mask-image:linear-gradient(to bottom,#000 22%,transparent 48%);mask-image:linear-gradient(to bottom,#000 22%,transparent 48%)}
+.hb-glow{position:absolute;left:13.6%;top:60%;width:11%;aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,214,120,.8),rgba(255,214,120,.22) 50%,transparent 72%);animation:hb-glow 5s ease-in-out infinite}
+.hb-mo{display:none;width:var(--wm);height:calc(var(--wm)/.5146)}
+.hb-mo .hb-glow{left:13.3%;top:62.4%;width:30%}
+
+/* drifting light rays, a gentle shade for readability, fireflies */
+.hb-rays{position:absolute;inset:-5%;mix-blend-mode:screen;
+  background:repeating-linear-gradient(108deg,transparent 0 120px,rgba(255,240,170,.22) 120px 200px);
+  -webkit-mask-image:radial-gradient(60% 70% at 78% 8%,#000,transparent 75%);mask-image:radial-gradient(60% 70% at 78% 8%,#000,transparent 75%);
+  animation:hb-rays 16s ease-in-out infinite alternate}
+.hb-shade{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(10,30,20,.32),transparent 42%,rgba(10,30,20,.22))}
+.ff{position:absolute;border-radius:50%;opacity:.15;
+  background:radial-gradient(circle,#fff7b8 0,rgba(255,226,120,.85) 35%,rgba(255,226,120,0) 70%);
+  animation:hb-ff var(--du,20s) ease-in-out var(--d,0s) infinite alternate,hb-blink var(--bl,4s) ease-in-out var(--d,0s) infinite}
+
+/* page text and cards sit on top of the scene */
+.page:has(.hbg)>h1{color:#fbf8ee;text-shadow:0 2px 18px rgba(8,26,16,.75)}
+.page:has(.hbg)>.sub,.page:has(.hbg)>h3.mt{color:#f4f0dc;text-shadow:0 1px 12px rgba(8,26,16,.75)}
+.page:has(.hbg) .card{background:rgba(251,249,241,.88);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.7)}
+.page:has(.hbg) .hero{background:linear-gradient(120deg,rgba(251,249,241,.92),rgba(220,232,213,.88))}
+
+[data-theme=dark] .hbg{filter:brightness(.55)}
+[data-theme=dark] .page:has(.hbg) .card{background:rgba(35,46,39,.88);border-color:rgba(255,255,255,.08)}
+[data-theme=dark] .page:has(.hbg) .hero{background:linear-gradient(120deg,rgba(35,46,39,.92),rgba(52,74,58,.88))}
+
+/* phones: the mobile version of the picture */
+@media(max-width:760px){
+  .hbg{left:0}
+  .hb-d{display:none}
+  .hb-mo{display:block}
+  .ff:nth-of-type(n+9){display:none}
+}
+@media(prefers-reduced-motion:reduce){.hbg *{animation:none!important}.hb-art{transition:none}.ff{opacity:.6}}

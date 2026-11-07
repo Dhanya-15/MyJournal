@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { format, subDays } from 'date-fns'
 import { ChevronLeft, ChevronRight, Lock } from 'lucide-react'
 import { MOODS, moodOf, today, useApp } from '../store.jsx'
-
+import HomeForest from '../HomeForest.jsx'
 const PROMPTS = ['What made you smile today?', 'What are you grateful for?', 'What challenged you today?', 'What are you proud of?', 'What would you tell your future self?']
 
 export default function Home() {
@@ -16,6 +16,7 @@ export default function Home() {
   const week = Array.from({ length: 7 }, (_, i) => format(subDays(new Date(), 6 - i), 'yyyy-MM-dd'))
   return (
     <>
+      <HomeForest />
       <p className="eyebrow">Home</p>
       <h1>Your Personal Space</h1>
       <p className="sub">{hi}{settings.name ? ', ' + settings.name : ''} · {format(new Date(), 'EEEE, MMM d')}. Take a breath, then write what is true today.</p>
