@@ -648,3 +648,42 @@ button.mini{display:block;width:100%;text-align:left}
 .g-vine{transform:scaleX(-1)!important}
 /* hide the floating icons in the Settings background */
 .sg-near,.fi{display:none!important}
+
+/* ===== MOOD INSIGHTS: sunlit meadow background (static) (keep at the END) ===== */
+.mg{position:fixed;inset:0 0 0 216px;z-index:0;overflow:hidden;pointer-events:none;
+  background:linear-gradient(172deg,#f7f3df 0%,#eff1d8 38%,#e1ebc9 100%)}
+.page>h1,.page>.sub,.mfilter,.gcard,.page>.err{position:relative;z-index:1}
+@media(min-width:761px){.main:has(.mg) .top{background:none}}
+
+/* warm sun glow and soft light rays from the top right */
+.mg-sun{position:absolute;inset:0;
+  background:
+    radial-gradient(60% 55% at 88% -4%,rgba(255,240,170,.75),rgba(255,240,170,.22) 45%,transparent 72%),
+    radial-gradient(50% 40% at 10% 100%,rgba(190,215,150,.45),transparent 70%)}
+.mg-sun::after{content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(112deg,transparent 0 80px,rgba(255,248,215,.32) 80px 140px);
+  -webkit-mask-image:radial-gradient(60% 60% at 88% 0%,#000,transparent 75%);mask-image:radial-gradient(60% 60% at 88% 0%,#000,transparent 75%)}
+
+/* leaves, sunbeams and daisy hill, top right */
+.mg-sky{position:absolute;top:0;right:0;width:clamp(300px,44vw,640px);height:auto;display:block;
+  -webkit-mask-image:linear-gradient(to left,#000 50%,transparent),linear-gradient(to bottom,#000 60%,transparent);
+  -webkit-mask-composite:source-in;
+  mask-image:linear-gradient(to left,#000 50%,transparent),linear-gradient(to bottom,#000 60%,transparent);mask-composite:intersect}
+
+/* rolling green hill along the bottom, behind the daisies */
+.mg-hill{position:absolute;left:-10%;right:-10%;bottom:-18vh;height:34vh;border-radius:50% 50% 0 0/100% 100% 0 0;
+  background:radial-gradient(ellipse at 50% 0%,rgba(168,200,120,.5),rgba(190,215,150,.2) 60%,transparent 80%)}
+
+/* grass and daisies along the bottom edge */
+.mg-bot{position:absolute;left:0;bottom:0;width:100%;height:clamp(60px,9vw,130px);object-fit:cover;object-position:left bottom;display:block;
+  -webkit-mask-image:linear-gradient(to top,#000 55%,transparent);mask-image:linear-gradient(to top,#000 55%,transparent)}
+
+[data-theme=dark] .mg{background:linear-gradient(172deg,#1b2620,#171E1A 60%,#1c2a22)}
+[data-theme=dark] .mg-sun{opacity:.12}
+[data-theme=dark] .mg-sky,[data-theme=dark] .mg-bot,[data-theme=dark] .mg-hill{opacity:.22;filter:brightness(.6)}
+
+@media(max-width:760px){
+  .mg{left:0}
+  .mg-sky{width:62vw}
+  .mg-bot{height:64px}
+}

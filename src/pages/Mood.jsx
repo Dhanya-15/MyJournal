@@ -4,6 +4,7 @@ import { addDays, addMonths, addWeeks, addYears, differenceInCalendarDays, eachD
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { CartesianGrid, ResponsiveContainer, Scatter, ScatterChart, Tooltip, XAxis, YAxis } from 'recharts'
 import { MOODS, moodOf, today, useApp } from '../store.jsx'
+import MoodGarden from '../MoodGarden.jsx'
 
 const RANGES = ['Day', 'Week', 'Month', 'Year', 'Custom']
 
@@ -69,6 +70,7 @@ export default function Mood() {
 
   return (
     <>
+      <MoodGarden />
       <h1>Understand Your Journey</h1>
       <p className="sub">See how your moods flow over time.</p>
 
