@@ -765,3 +765,78 @@ button.mini{display:block;width:100%;text-align:left}
   .day{background:rgba(255,255,255,.7)}
 }
 @media(prefers-reduced-motion:reduce){.cg *,.cg-light{animation:none!important}.cg-box{transition:none}}
+
+/* ===== MY JOURNAL: Forest Canopy (keep at the VERY END) ===== */
+@keyframes fc-sway-l{0%,100%{transform:rotate(-.9deg)}50%{transform:rotate(1.1deg)}}
+@keyframes fc-sway-r{0%,100%{transform:rotate(.9deg)}50%{transform:rotate(-1.1deg)}}
+@keyframes fc-drift{from{transform:translateX(-5px)}to{transform:translateX(5px)}}
+@keyframes fc-rays{0%{transform:translateX(-30px);opacity:.6}100%{transform:translateX(40px);opacity:1}}
+@keyframes fc-mote{0%{transform:translate(0,0) scale(.7);opacity:0}15%{opacity:.85}85%{opacity:.55}100%{transform:translate(36px,-105vh) scale(1.1);opacity:0}}
+@keyframes fc-glow{0%,100%{opacity:.5;transform:translate(-50%,-50%) scale(.9)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.2)}}
+
+/* background sits behind everything on the page */
+.fc{position:fixed;inset:0 0 0 216px;z-index:-1;overflow:hidden;pointer-events:none;
+  background:linear-gradient(170deg,#eef1dc 0%,#e7edd2 50%,#dde8c8 100%)}
+@media(min-width:761px){.main:has(.fc) .top{background:none}}
+
+/* sun glow and moving light rays */
+.fc-rays{position:absolute;inset:0;
+  background:radial-gradient(60% 45% at 50% -5%,rgba(255,245,190,.75),transparent 70%)}
+.fc-rays::after{content:'';position:absolute;inset:-10% -10% 0;
+  background:repeating-linear-gradient(106deg,transparent 0 110px,rgba(255,248,210,.4) 110px 190px);
+  -webkit-mask-image:radial-gradient(70% 60% at 50% 0%,#000,transparent 75%);mask-image:radial-gradient(70% 60% at 50% 0%,#000,transparent 75%);
+  animation:fc-rays 15s ease-in-out infinite alternate}
+
+/* sunlit leaves across the top (outer parts fade so the corner branches stay clean) */
+.fc-strip{position:absolute;top:0;left:0;right:0;animation:fc-drift 11s ease-in-out infinite alternate}
+.fc-strip img{display:block;width:100%;height:auto;
+  -webkit-mask-image:linear-gradient(to right,transparent 18%,#000 35%,#000 65%,transparent 82%),linear-gradient(to bottom,#000 55%,transparent);
+  -webkit-mask-composite:source-in;
+  mask-image:linear-gradient(to right,transparent 18%,#000 35%,#000 65%,transparent 82%),linear-gradient(to bottom,#000 55%,transparent);mask-composite:intersect}
+
+/* corner branches with lanterns */
+.fc-c{position:absolute;top:0;width:clamp(240px,27vw,430px);transition:transform .35s ease-out}
+.fc-tl{left:0;transform:translate3d(calc(var(--px,0)*-10px),calc(var(--py,0)*-6px),0)}
+.fc-tr{right:0;width:clamp(220px,25vw,400px);transform:translate3d(calc(var(--px,0)*-14px),calc(var(--py,0)*-8px),0)}
+.fc-in{position:relative}
+.fc-tl .fc-in{transform-origin:0 0;animation:fc-sway-l 9s ease-in-out infinite}
+.fc-tr .fc-in{transform-origin:100% 0;animation:fc-sway-r 10s ease-in-out infinite}
+.fc-c img{display:block;width:100%;height:auto}
+.fc-tl img{-webkit-mask-image:linear-gradient(to right,#000 55%,transparent),linear-gradient(to bottom,#000 55%,transparent);-webkit-mask-composite:source-in;
+  mask-image:linear-gradient(to right,#000 55%,transparent),linear-gradient(to bottom,#000 55%,transparent);mask-composite:intersect}
+.fc-tr img{-webkit-mask-image:linear-gradient(to left,#000 55%,transparent),linear-gradient(to bottom,#000 55%,transparent);-webkit-mask-composite:source-in;
+  mask-image:linear-gradient(to left,#000 55%,transparent),linear-gradient(to bottom,#000 55%,transparent);mask-composite:intersect}
+
+/* soft lantern glow */
+.fc-glow{position:absolute;width:clamp(60px,8vw,110px);height:clamp(60px,8vw,110px);border-radius:50%;
+  background:radial-gradient(circle,rgba(255,226,140,.65),rgba(255,226,140,.2) 50%,transparent 72%);animation:fc-glow 6s ease-in-out infinite}
+.g3{left:50.6%;top:61%}
+.g4{left:85.8%;top:56.7%;animation-delay:-3s}
+
+/* a few floating specks of light */
+.fc-mote{position:absolute;bottom:-4vh;border-radius:50%;opacity:0;
+  background:radial-gradient(circle,rgba(255,240,170,.95),rgba(255,240,170,0) 70%);animation:fc-mote var(--du,36s) linear var(--d,0s) infinite}
+
+/* journal content on a clean translucent ivory panel */
+.jr1{margin-top:clamp(18px,5vw,64px);padding:clamp(16px,2.6vw,30px);border-radius:30px;
+  background:rgba(250,248,238,.8);border:1px solid rgba(255,255,255,.75);box-shadow:0 24px 60px rgba(70,90,50,.16)}
+.jr1 .bar{background:none;padding:0;box-shadow:none}
+.jr1 .entry,.jr1 .col,.jr1 .keep,.jr1 .empty{background:rgba(255,253,246,.9)}
+.jr1 .entry.lift:hover{box-shadow:0 20px 44px rgba(60,90,50,.22)}
+
+[data-theme=dark] .fc{background:linear-gradient(170deg,#1b2620,#171E1A 55%,#1c2a22)}
+[data-theme=dark] .fc-rays,[data-theme=dark] .fc-mote,[data-theme=dark] .fc-glow{opacity:.15}
+[data-theme=dark] .fc-strip,[data-theme=dark] .fc-c{opacity:.35;filter:brightness(.6)}
+[data-theme=dark] .jr1{background:rgba(35,46,39,.84);border-color:rgba(255,255,255,.08)}
+[data-theme=dark] .jr1 .entry,[data-theme=dark] .jr1 .col,[data-theme=dark] .jr1 .keep,[data-theme=dark] .jr1 .empty{background:rgba(52,74,58,.6)}
+
+/* phones: branches stay at the top corners, below the fixed top bar */
+@media(max-width:760px){
+  .fc{left:0}
+  .fc-strip{display:none}
+  .fc-c{top:56px;width:50vw}
+  .fc-tr{width:44vw}
+  .fc-mote:nth-of-type(n+4){display:none}
+  .jr1{margin-top:30px;padding:14px;border-radius:24px}
+}
+@media(prefers-reduced-motion:reduce){.fc *,.fc-rays::after{animation:none!important}.fc-c{transition:none}}

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Eye, EyeOff, Heart, ListFilter, Lock, Pencil, Trash2, X } from 'lucide-react'
 import { MOODS, moodOf, useApp, thumb, colCover } from '../store.jsx'
 import { decrypt } from '../crypto.js'
+import ForestCanopy from '../ForestCanopy.jsx'
 
 const tilt = (e) => {
   if (e.pointerType !== 'mouse') return
@@ -56,6 +57,7 @@ export default function MyJournal() {
 
   return (
     <div className="jr1">
+      <ForestCanopy />
       <h1>All Your Entries</h1>
       <p className="sub">Relive your thoughts, explore your collections and see how you've grown.</p>
 
