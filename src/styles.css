@@ -407,73 +407,6 @@ body.portal-in .main{animation:pt-reveal 1.1s cubic-bezier(.2,.8,.2,1) both}
 
 /* Write Journal */
 .wj .paper{margin-top:4px}
-
-/* FULL-SCREEN WRITE JOURNAL BACKGROUND */
-
-.wj-bg {
-  position: relative;
-  isolation: isolate;
-  width: 100%;
-  min-height: 100dvh;
-  background: transparent !important;
-}
-
-/* Background fills the viewport, even behind parent padding */
-.wj-bg::before {
-  content: "";
-  position: fixed;
-
-  /* Desktop: exclude the fixed sidebar */
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: var(--wj-sidebar-width, 216px);
-
-  background-image: url("/images/write-journal-desktop.png");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-
-  z-index: -1;
-  pointer-events: none;
-}
-
-/* Journal content */
-.wj-bg > .wj {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  min-height: 100dvh;
-  box-sizing: border-box;
-  background: transparent !important;
-}
-
-/* Writing editor */
-.wj-bg .paper {
-  background: rgba(255, 253, 247, 0.91) !important;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-radius: 22px;
-}
-
-/* MOBILE VIEW */
-@media (max-width: 767px) {
-  .wj-bg::before {
-    left: 0;
-    background-image: url("/images/write-journal-mobile.png");
-    background-position: center;
-    background-size: cover;
-  }
-
-  .wj-bg > .wj {
-    min-height: 100dvh;
-  }
-
-  .wj-bg .paper {
-    background: rgba(255, 253, 247, 0.93) !important;
-  }
-}
-
 .wj .body{min-height:max(320px,calc(100dvh - 400px))}
 .pcar{display:flex;align-items:center;gap:6px;margin:12px 0;padding:5px 8px;border-radius:30px;background:var(--surface);box-shadow:var(--sh);animation:floaty 7s ease-in-out infinite;touch-action:pan-y;overflow:hidden}
 .pcar .pr2{flex:1;min-width:0;text-align:center;padding:8px 10px;font-family:'Caveat',cursive;font-size:1.4rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;animation:slideL .5s both}
@@ -940,3 +873,86 @@ button.mini{display:block;width:100%;text-align:left}
   .fc-bf{width:20vw}
 }
 @media(prefers-reduced-motion:reduce){.fc-bl .fc-in,.fc-bf .fc-in{animation:none}}
+
+/* ===== WRITE JOURNAL: Rainy Window Retreat (keep at the VERY END) ===== */
+@keyframes rw-fall{from{transform:translate3d(0,-14vh,0) rotate(8deg)}to{transform:translate3d(-16vh,118vh,0) rotate(8deg)}}
+@keyframes rw-slide{0%{transform:translateY(0);opacity:0}12%{opacity:.95}80%{opacity:.7}100%{transform:translateY(62vh);opacity:0}}
+@keyframes rw-lt{0%,100%{transform:translate(0,0) scale(1);opacity:.55}50%{transform:translate(44px,26px) scale(1.12);opacity:.95}}
+@keyframes rw-glow{0%,100%{opacity:.5;transform:translate(-50%,-50%) scale(.92)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.16)}}
+@keyframes rw-sway{0%,100%{transform:rotate(-.9deg)}50%{transform:rotate(1.1deg)}}
+@keyframes rw-drift{from{transform:translateX(-6px)}to{transform:translateX(6px)}}
+
+.rw{position:fixed;inset:0 0 0 216px;z-index:-1;overflow:hidden;pointer-events:none;background:#9db892}
+@media(min-width:761px){.main:has(.rw) .top{background:none}}
+.wj>h1,.wj>.sub{text-shadow:0 1px 14px rgba(250,248,238,.85)}
+
+/* blurred greenery with warm light spots */
+.rw-base{position:absolute;inset:-4%;transform:translate3d(calc(var(--px,0)*-4px),calc(var(--py,0)*-3px),0);transition:transform .4s ease-out;
+  background:
+    radial-gradient(circle 70px at 22% 16%,rgba(255,255,236,.5),transparent 72%),
+    radial-gradient(circle 54px at 46% 30%,rgba(255,250,214,.38),transparent 72%),
+    radial-gradient(circle 80px at 82% 20%,rgba(255,255,236,.4),transparent 72%),
+    radial-gradient(circle 60px at 64% 58%,rgba(255,238,190,.32),transparent 72%),
+    radial-gradient(circle 90px at 30% 74%,rgba(255,226,150,.3),transparent 72%),
+    linear-gradient(165deg,#d2dfc3 0%,#abc4a0 35%,#88ab8c 70%,#6c9074 100%)}
+
+/* soft window frame bars behind the glass */
+.rw-beam{position:absolute;display:block;filter:blur(2px)}
+.b1{top:0;bottom:0;left:76%;width:28px;background:linear-gradient(90deg,transparent,rgba(120,92,62,.26),transparent)}
+.b2{left:0;right:0;top:34%;height:24px;background:linear-gradient(to bottom,transparent,rgba(120,92,62,.22),transparent)}
+
+/* moving light reflections */
+.rw-lt{position:absolute;display:block;border-radius:50%;filter:blur(18px);background:radial-gradient(circle,rgba(255,236,170,.6),transparent 70%);animation:rw-lt 18s ease-in-out infinite}
+.l1{width:260px;height:260px;left:14%;top:46%}
+.l2{width:200px;height:200px;left:58%;top:12%;animation-delay:-7s}
+.l3{width:230px;height:230px;left:68%;top:64%;animation-delay:-12s}
+
+/* vines, lantern, mug, notebook from the reference */
+.rw-obj{position:absolute;transition:transform .4s ease-out}
+.rw-top{left:0;right:0;top:0;height:clamp(50px,7vw,90px);transform:translate3d(calc(var(--px,0)*-8px),calc(var(--py,0)*-4px),0);animation:rw-drift 12s ease-in-out infinite alternate}
+.rw-top img{display:block;width:100%;height:100%;object-fit:cover;
+  -webkit-mask-image:linear-gradient(to bottom,#000 55%,transparent);mask-image:linear-gradient(to bottom,#000 55%,transparent)}
+.rw-left{left:0;top:0;bottom:0;width:clamp(100px,11vw,170px);transform:translate3d(calc(var(--px,0)*-12px),calc(var(--py,0)*-6px),0)}
+.rw-in{position:absolute;inset:0;
+  -webkit-mask-image:linear-gradient(to right,#000 55%,transparent);mask-image:linear-gradient(to right,#000 55%,transparent)}
+.rw-in img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:left top;display:block}
+/* only the vine at the top sways; the lantern and mug stay still */
+.rw-in .rw-sw{transform-origin:0 0;animation:rw-sway 9s ease-in-out infinite;
+  -webkit-mask-image:linear-gradient(to bottom,#000 30%,transparent 58%);mask-image:linear-gradient(to bottom,#000 30%,transparent 58%)}
+.rw-glow{position:absolute;left:56%;top:68%;width:clamp(70px,9vw,120px);height:clamp(70px,9vw,120px);border-radius:50%;
+  background:radial-gradient(circle,rgba(255,214,120,.7),rgba(255,214,120,.2) 50%,transparent 72%);animation:rw-glow 5s ease-in-out infinite}
+.rw-bottom{left:12%;right:0;bottom:0;height:clamp(64px,8vw,115px);transform:translate3d(calc(var(--px,0)*-16px),calc(var(--py,0)*-8px),0)}
+.rw-bottom img{display:block;width:100%;height:100%;object-fit:cover;object-position:left bottom;
+  -webkit-mask-image:linear-gradient(to top,#000 55%,transparent),linear-gradient(to right,transparent,#000 14%);-webkit-mask-composite:source-in;
+  mask-image:linear-gradient(to top,#000 55%,transparent),linear-gradient(to right,transparent,#000 14%);mask-composite:intersect}
+.rw-mbot{display:none}
+
+/* gentle falling rain and drops sliding down the glass */
+.rw-rain{position:absolute;inset:0;transform:translate3d(calc(var(--px,0)*-6px),calc(var(--py,0)*-3px),0);transition:transform .4s ease-out}
+.rn{position:absolute;top:0;width:1.5px;border-radius:1px;background:linear-gradient(to bottom,transparent,rgba(255,255,255,.9));animation:rw-fall var(--du,3s) linear var(--d,0s) infinite}
+.dr{position:absolute;width:9px;height:12px;border-radius:50% 50% 55% 55%;opacity:0;
+  background:radial-gradient(circle at 35% 30%,#fff,rgba(255,255,255,.35) 60%,rgba(255,255,255,.08));box-shadow:0 1px 3px rgba(40,60,40,.25);
+  animation:rw-slide var(--du,16s) ease-in var(--d,0s) infinite}
+.rw-haze{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(250,248,238,.28),transparent 35%)}
+
+/* the editor and prompt bar sit on clean translucent ivory glass */
+.wj .paper{background:rgba(251,249,241,.9);border:1px solid rgba(255,255,255,.75);border-radius:26px;
+  box-shadow:0 26px 60px rgba(30,50,35,.28)}
+.wj .pcar{background:rgba(251,249,241,.82);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.7)}
+
+[data-theme=dark] .rw{filter:brightness(.5) saturate(.85)}
+[data-theme=dark] .wj .paper{background:rgba(35,46,39,.9);border-color:rgba(255,255,255,.08)}
+[data-theme=dark] .wj .pcar{background:rgba(35,46,39,.85)}
+[data-theme=dark] .wj>h1,[data-theme=dark] .wj>.sub{text-shadow:none}
+
+/* phones: same scene, lighter */
+@media(max-width:760px){
+  .rw{left:0}
+  .rw-top,.rw-bottom,.b1{display:none}
+  .rw-left{width:26vw;opacity:.9}
+  .rw-mbot{display:block;position:absolute;left:0;right:0;bottom:0;width:100%;height:auto;
+    -webkit-mask-image:linear-gradient(to top,#000 55%,transparent);mask-image:linear-gradient(to top,#000 55%,transparent)}
+  .rn:nth-child(n+24){display:none}
+  .l2,.l3{display:none}
+}
+@media(prefers-reduced-motion:reduce){.rw *{animation:none!important}.rw-obj,.rw-base,.rw-rain{transition:none}}

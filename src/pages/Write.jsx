@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { ChevronLeft, ChevronRight, FolderOpen, Lock, X } from 'lucide-react'
 import { MOODS, today, useApp } from '../store.jsx'
 import { encrypt } from '../crypto.js'
-
+import RainyWindow from '../RainyWindow.jsx'
 const PROMPTS = ['What made you smile today?', 'What are you grateful for?', 'What did you learn today?', "What's on your mind right now?", 'What is one small step towards your goal?', 'What challenged you today?', 'What are you proud of?', 'What would you tell your future self?']
 const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
@@ -67,6 +67,7 @@ export default function Write() {
   return (
     <div className="wj-bg">
     <div className="wj" onKeyDown={(e) => e.key === 'Escape' && setPop(null)}>
+      <RainyWindow />
       <h1>Write Your Journal</h1>
       <p className="sub">Capture your thoughts, feelings and moments.</p>
 
