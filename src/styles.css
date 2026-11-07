@@ -600,3 +600,44 @@ button.mini{display:block;width:100%;text-align:left}
   .f3,.f6{display:none}
 }
 @media(prefers-reduced-motion:reduce){.br svg,.shd,.sun,.fi{animation:none}.sg>div{transition:none}}
+
+/* ===== SETTINGS: real garden photo layers (keep at the VERY END) ===== */
+@keyframes sg-sway-t{0%,100%{transform:rotate(-.35deg) scaleY(1)}50%{transform:rotate(.45deg) scaleY(1.04)}}
+@keyframes sg-sway-v{0%,100%{transform:scaleX(-1) rotate(-1.6deg)}50%{transform:scaleX(-1) rotate(2deg)}}
+
+.sg{background:linear-gradient(160deg,#fff9e8 0%,#f4efdd 50%,#e7edd9 100%)}
+.sg::before{content:'';position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(70% 55% at 42% -5%,rgba(255,236,170,.55),transparent 70%);animation:sg-breathe 11s ease-in-out infinite}
+.br{display:none}
+
+.gi{position:absolute;display:block;max-width:none;user-select:none}
+/* leaf canopy along the top edge */
+.g-top{left:0;top:0;width:100%;height:clamp(66px,9vw,125px);object-fit:cover;object-position:left top;
+  mix-blend-mode:multiply;transform-origin:top left;
+  -webkit-mask-image:linear-gradient(to bottom,#000 55%,transparent);mask-image:linear-gradient(to bottom,#000 55%,transparent);
+  animation:sg-sway-t 10s ease-in-out infinite}
+/* hanging vine, top-right, so it stays clear of the heading */
+.g-vine{right:0;top:clamp(40px,5vw,70px);width:clamp(74px,8.5vw,130px);height:auto;opacity:.95;
+  mix-blend-mode:multiply;transform:scaleX(-1);transform-origin:50% 0;
+  -webkit-mask-image:linear-gradient(to right,#000 50%,transparent),linear-gradient(to bottom,transparent,#000 8%,#000 80%,transparent);
+  -webkit-mask-composite:source-in;mask-image:linear-gradient(to right,#000 50%,transparent),linear-gradient(to bottom,transparent,#000 8%,#000 80%,transparent);mask-composite:intersect;
+  animation:sg-sway-v 9s ease-in-out infinite}
+/* garden floor: moss, flower and stone podium along the bottom */
+.g-bot{left:0;bottom:0;width:100%;height:clamp(66px,9.5vw,135px);object-fit:cover;object-position:left bottom;
+  -webkit-mask-image:linear-gradient(to top,#000 55%,transparent);mask-image:linear-gradient(to top,#000 55%,transparent)}
+
+/* keep the center calm: fewer drifting shadows and icons */
+.s2,.s3,.s5{display:none}
+.shd{background:rgba(39,63,50,.09)}
+
+[data-theme=dark] .sg::before{opacity:.15}
+[data-theme=dark] .gi{mix-blend-mode:normal;opacity:.3;filter:brightness(.55) saturate(.8)}
+
+/* phones: same scene, smaller */
+@media(max-width:760px){
+  .g-top{height:60px}
+  .g-vine{width:68px;top:46px}
+  .g-bot{height:70px}
+  .fi{display:none}.f2,.f5{display:grid}
+}
+@media(prefers-reduced-motion:reduce){.g-top,.g-vine,.sg::before{animation:none}}
