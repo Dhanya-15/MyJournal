@@ -69,7 +69,7 @@ export default function Write() {
     <div className="wj" onKeyDown={(e) => e.key === 'Escape' && setPop(null)}>
       <RainyWindow />
       <h1>Write Your Journal</h1>
-      <p className="sub">Capture your thoughts, feelings and moments.</p>
+      <p className="sub"></p>
 
       <div className="pcar" data-dir={dir} onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}
         onPointerDown={(e) => { sx.current = e.clientX }}
