@@ -646,3 +646,5 @@ button.mini{display:block;width:100%;text-align:left}
 .sg>div{transform:none!important;transition:none!important}
 .g-top,.g-bot,.fi{transform:none!important}
 .g-vine{transform:scaleX(-1)!important}
+/* hide the floating icons in the Settings background */
+.sg-near,.fi{display:none!important}
