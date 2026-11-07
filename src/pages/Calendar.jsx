@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { addMonths, eachDayOfInterval, endOfMonth, endOfWeek, format, isSameMonth, startOfMonth, startOfWeek } from 'date-fns'
 import { ChevronLeft, ChevronRight, FilePlus2, Lock, Pencil, StickyNote, Trash2, X } from 'lucide-react'
 import { MOODS, moodOf, thumb, today, useApp } from '../store.jsx'
+import CalendarGarden from '../CalendarGarden.jsx'
 
 export default function Calendar() {
   const nav = useNavigate()
@@ -30,6 +31,7 @@ export default function Calendar() {
 
   return (
     <>
+      <CalendarGarden />
       <h1>Your Journal Calendar</h1>
       <p className="sub">Look back, relive and see how your days come together.</p>
       <p className="cal-hint">You can add quick notes and journal entries by selecting any date.</p>
