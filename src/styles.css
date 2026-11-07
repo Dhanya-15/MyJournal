@@ -1008,3 +1008,39 @@ button.mini{display:block;width:100%;text-align:left}
   .ff:nth-of-type(n+9){display:none}
 }
 @media(prefers-reduced-motion:reduce){.hbg *{animation:none!important}.hb-art{transition:none}.ff{opacity:.6}}
+
+/* ===== MOBILE: Write Journal alignment + dark green top bar (keep at the VERY END) ===== */
+
+/* the editor card can never grow wider than the screen */
+.wj{min-width:0}
+.wj .paper{grid-template-columns:minmax(0,1fr)}
+.wj .paper>*{min-width:0}
+.wj .title,.wj .body{width:100%;min-width:0;box-sizing:border-box}
+
+@media(max-width:760px){
+  /* dark green top bar with the menu button */
+  .top{background:#1d3a2c!important;box-shadow:0 2px 14px rgba(0,0,0,.25)}
+  .top .ic{background:rgba(255,255,255,.14);color:#f3efdc;box-shadow:none}
+  .top .avatar{background:rgba(255,255,255,.2);border-color:rgba(255,255,255,.45)}
+  .top .burger{background:#3b6e54;color:#fff}
+  .top .sbox.open .sfield .ic{background:none;color:#233a2e}
+  [data-theme=dark] .top{background:#0f1612!important}
+
+  /* Write Journal: tidy, aligned editor card */
+  .wj .paper{padding:14px;gap:12px}
+  .wj .paper>.row:first-child{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
+  .wj .paper>.row:first-child>.row{display:flex;flex-wrap:nowrap;gap:8px;align-items:center}
+  .wj .paper input[type=date]{flex:1;min-width:0;font-size:16px}
+
+  /* six moods in one even row */
+  .wj .moods.small{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px;width:100%}
+  .wj .moods.small .mood{padding:0;justify-self:center}
+  .wj .moods.small .mood span{width:min(46px,11.5vw);height:min(46px,11.5vw);font-size:1.2rem}
+
+  .wj .title{font-size:1.2rem;padding:10px 14px}
+
+  /* buttons in a neat row, status line underneath */
+  .wj .paper>.row:not(:first-child){display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .wj .paper>.row:not(:first-child)>.btn{width:100%;justify-content:center}
+  .wj .paper>.row:not(:first-child)>small{grid-column:1/-1;order:3;text-align:center}
+}
