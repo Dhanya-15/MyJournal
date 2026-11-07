@@ -414,7 +414,7 @@ body.portal-in .main{animation:pt-reveal 1.1s cubic-bezier(.2,.8,.2,1) both}
   width: 100%;
   min-height: 100dvh;
 
-  background-image: url('/images/write-journal-desktop.png');
+  background-image: url('/images/writejournal2.png');
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
@@ -443,7 +443,7 @@ body.portal-in .main{animation:pt-reveal 1.1s cubic-bezier(.2,.8,.2,1) both}
 /* MOBILE BACKGROUND */
 @media (max-width: 767px) {
   .wj-bg {
-    background-image: url('/images/write-journal-mobile.png');
+    background-image: url('/images/writejournal1.png');
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
