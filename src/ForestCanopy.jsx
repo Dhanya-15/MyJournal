@@ -24,8 +24,11 @@ export default function ForestCanopy() {
     <div ref={ref} className="fc" aria-hidden="true">
       <div className="fc-rays" />
       <div className="fc-strip"><img src="/images/jr-strip.jpg" alt="" /></div>
+      <div className="fc-strip fc-bstrip"><img src="/images/jr-bot.jpg" alt="" /></div>
       <div className="fc-c fc-tl"><div className="fc-in"><img src="/images/jr-tl.jpg" alt="" /><i className="fc-glow g3" /></div></div>
       <div className="fc-c fc-tr"><div className="fc-in"><img src="/images/jr-tr.jpg" alt="" /><i className="fc-glow g4" /></div></div>
+      <div className="fc-c fc-b fc-bl"><div className="fc-in"><img src="/images/jr-bl.jpg" alt="" /></div></div>
+      <div className="fc-c fc-b fc-bf"><div className="fc-in"><img src="/images/jr-flower.jpg" alt="" /></div></div>
       {MOTES.map(([l, d, du, s], i) => <i key={i} className="fc-mote" style={{ left: l + '%', width: s, height: s, '--d': d + 's', '--du': du + 's' }} />)}
     </div>
   )

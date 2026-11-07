@@ -840,3 +840,36 @@ button.mini{display:block;width:100%;text-align:left}
   .jr1{margin-top:30px;padding:14px;border-radius:24px}
 }
 @media(prefers-reduced-motion:reduce){.fc *,.fc-rays::after{animation:none!important}.fc-c{transition:none}}
+
+/* ===== MY JOURNAL: bottom canopy (keep at the VERY END) ===== */
+@keyframes fc-sway-b{0%,100%{transform:rotate(.9deg)}50%{transform:rotate(-1.1deg)}}
+@keyframes fc-sway-f{0%,100%{transform:rotate(-1.2deg)}50%{transform:rotate(1.4deg)}}
+
+/* sunlit leaves rising along the bottom edge */
+.fc-bstrip{top:auto;bottom:0}
+.fc-bstrip img{
+  -webkit-mask-image:linear-gradient(to right,transparent 18%,#000 35%,#000 65%,transparent 82%),linear-gradient(to top,#000 55%,transparent);
+  -webkit-mask-composite:source-in;
+  mask-image:linear-gradient(to right,transparent 18%,#000 35%,#000 65%,transparent 82%),linear-gradient(to top,#000 55%,transparent);mask-composite:intersect}
+
+/* bottom corner pieces */
+.fc-b{top:auto;bottom:0}
+.fc-bl{left:0;width:clamp(140px,16vw,250px);transform:translate3d(calc(var(--px,0)*-8px),calc(var(--py,0)*-5px),0)}
+.fc-bf{right:0;width:clamp(78px,8vw,120px);transform:translate3d(calc(var(--px,0)*-12px),calc(var(--py,0)*-7px),0)}
+.fc-bl .fc-in{transform-origin:0 100%;animation:fc-sway-b 10s ease-in-out infinite}
+.fc-bf .fc-in{transform-origin:100% 100%;animation:fc-sway-f 8s ease-in-out infinite}
+.fc-bl img{-webkit-mask-image:linear-gradient(to right,#000 55%,transparent),linear-gradient(to top,#000 60%,transparent);-webkit-mask-composite:source-in;
+  mask-image:linear-gradient(to right,#000 55%,transparent),linear-gradient(to top,#000 60%,transparent);mask-composite:intersect}
+.fc-bf img{-webkit-mask-image:linear-gradient(to left,#000 50%,transparent),linear-gradient(to top,#000 55%,transparent);-webkit-mask-composite:source-in;
+  mask-image:linear-gradient(to left,#000 50%,transparent),linear-gradient(to top,#000 55%,transparent);mask-composite:intersect}
+
+[data-theme=dark] .fc-bstrip,[data-theme=dark] .fc-b{opacity:.35;filter:brightness(.6)}
+
+/* phones */
+@media(max-width:760px){
+  .fc-bstrip{display:block;opacity:.85}
+  .fc-b{top:auto;bottom:0}
+  .fc-bl{width:34vw}
+  .fc-bf{width:20vw}
+}
+@media(prefers-reduced-motion:reduce){.fc-bl .fc-in,.fc-bf .fc-in{animation:none}}
