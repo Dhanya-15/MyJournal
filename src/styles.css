@@ -641,3 +641,8 @@ button.mini{display:block;width:100%;text-align:left}
   .fi{display:none}.f2,.f5{display:grid}
 }
 @media(prefers-reduced-motion:reduce){.g-top,.g-vine,.sg::before{animation:none}}
+/* ===== SETTINGS BACKGROUND: completely still (keep at the VERY END) ===== */
+.sg,.sg *,.sg::before{animation:none!important}
+.sg>div{transform:none!important;transition:none!important}
+.g-top,.g-bot,.fi{transform:none!important}
+.g-vine{transform:scaleX(-1)!important}

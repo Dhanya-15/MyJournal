@@ -1,24 +1,11 @@
 import { useEffect, useRef } from 'react'
 import { Database, FolderTree, Info, PenLine, ShieldCheck, UserRound } from 'lucide-react'
 
+
 const ICONS = [[UserRound, 'f1'], [PenLine, 'f2'], [ShieldCheck, 'f3'], [Database, 'f4'], [FolderTree, 'f5'], [Info, 'f6']]
 
 export default function SettingsGarden() {
   const ref = useRef(null)
-  useEffect(() => {
-    const el = ref.current
-    if (!el || matchMedia('(prefers-reduced-motion: reduce)').matches || matchMedia('(pointer: coarse)').matches) return
-    let raf
-    const mv = (e) => {
-      cancelAnimationFrame(raf)
-      raf = requestAnimationFrame(() => {
-        el.style.setProperty('--px', ((e.clientX / innerWidth - 0.5) * 2).toFixed(3))
-        el.style.setProperty('--py', ((e.clientY / innerHeight - 0.5) * 2).toFixed(3))
-      })
-    }
-    addEventListener('pointermove', mv)
-    return () => { removeEventListener('pointermove', mv); cancelAnimationFrame(raf) }
-  }, [])
 
   return (
     <div ref={ref} className="sg" aria-hidden="true">
